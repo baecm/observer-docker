@@ -1,7 +1,7 @@
 from typing import List, Iterable
 
-from scbw.bot_storage import BotStorage
-from scbw.player import BotPlayer, PlayerRace
+from scre.bot_storage import BotStorage
+from scre.player import BotPlayer, PlayerRace
 
 
 

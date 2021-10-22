@@ -14,13 +14,13 @@ from typing import List, Optional, Callable, Dict, Any
 import docker
 import docker.errors
 import docker.types
-from scbw.defaults import SCBW_BASE_DIR, SC_PARENT_IMAGE, SC_JAVA_IMAGE, SC_BINARY_LINK
-from scbw.error import ContainerException, DockerException, GameException, RealtimeOutedException
-from scbw.game_type import GameType
-from scbw.logs import find_frames, find_logs, find_replays, find_scores
-from scbw.player import BotPlayer, HumanPlayer, Player
-from scbw.utils import download_file, random_string
-from scbw.vnc import launch_vnc_viewer
+from scre.defaults import SCRE_BASE_DIR, SC_PARENT_IMAGE, SC_JAVA_IMAGE, SC_BINARY_LINK
+from scre.error import ContainerException, DockerException, GameException, RealtimeOutedException
+from scre.game_type import GameType
+from scre.logs import find_frames, find_logs, find_replays, find_scores
+from scre.player import BotPlayer, HumanPlayer, Player
+from scre.utils import download_file, random_string
+from scre.vnc import launch_vnc_viewer
 
 logger = logging.getLogger(__name__)
 # disable docker package spam logging
@@ -94,7 +94,7 @@ def ensure_local_image(
         local_image: str,
         parent_image: str = SC_PARENT_IMAGE,
         java_image: str = SC_JAVA_IMAGE,
-        starcraft_base_dir: str = SCBW_BASE_DIR,
+        starcraft_base_dir: str = SCRE_BASE_DIR,
         starcraft_binary_link: str = SC_BINARY_LINK,
 ) -> None:
     """

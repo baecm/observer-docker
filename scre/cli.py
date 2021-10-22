@@ -5,16 +5,16 @@ import sys
 
 import coloredlogs
 import docker
-from scbw.defaults import (
-    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, SCBW_BASE_DIR, SC_IMAGE,
+from scre.defaults import (
+    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, SCRE_BASE_DIR, SC_IMAGE,
     SC_BWAPI_DATA_BWTA_DIR, SC_BWAPI_DATA_BWTA2_DIR, VERSION
 )
-from scbw.docker_utils import BASE_VNC_PORT, VNC_HOST
-from scbw.error import ScbwException
-from scbw.game import run_game
-from scbw.game_type import GameType
-from scbw.player import bot_regex, PlayerRace
-from scbw.utils import random_string
+from scre.docker_utils import BASE_VNC_PORT, VNC_HOST
+from scre.error import ScbwException
+from scre.game import run_game
+from scre.game_type import GameType
+from scre.player import bot_regex, PlayerRace
+from scre.utils import random_string
 
 logger = logging.getLogger(__name__)
 
@@ -166,9 +166,9 @@ def main():
         except KeyboardInterrupt:
             sys.exit(1)
 
-    if not os.path.exists(SCBW_BASE_DIR):
-        parser.error(f'The data directory {SCBW_BASE_DIR} was not found. '
-                     f'Did you run "scbw.play --install"?')
+    if not os.path.exists(SCRE_BASE_DIR):
+        parser.error(f'The data directory {SCRE_BASE_DIR} was not found. '
+                     f'Did you run "scre.play --install"?')
         # parser.error exits
 
     # bots are always required, but not if showing version :)

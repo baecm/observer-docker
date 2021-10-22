@@ -8,8 +8,8 @@ import shutil
 import numpy as np
 import requests
 
-from scbw.player import BotPlayer, BotJsonMeta
-from scbw.utils import levenshtein_dist, download_extract_zip, download_file
+from scre.player import BotPlayer, BotJsonMeta
+from scre.utils import levenshtein_dist, download_extract_zip, download_file
 
 
 
