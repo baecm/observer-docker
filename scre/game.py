@@ -18,23 +18,18 @@ from scre.error import GameException, RealtimeOutedException
 from scre.game_type import GameType
 from scre.player import HumanPlayer, BotPlayer
 from scre.plot import RealtimeFramePlotter
-from scre.result import GameResult
+# from scre.result import GameResult
 from scre.vnc import check_vnc_exists
 
 logger = logging.getLogger(__name__)
 
 
 class GameArgs(Namespace):
-    bots: List[str]
-    human: bool
-    map: str
+    bot: str
+    replay: str
     headless: bool
     game_name: str
-    game_type: str
     game_speed: int
-    hide_names: bool
-    random_names: bool
-    timeout: int
     bot_dir: str
     game_dir: str
     map_dir: str
@@ -43,7 +38,6 @@ class GameArgs(Namespace):
     vnc_base_port: int
     vnc_host: str
     capture_movement: bool
-    auto_launch: bool
     show_all: bool
     allow_input: bool
     plot_realtime: bool
@@ -55,12 +49,11 @@ class GameArgs(Namespace):
 def run_game(
         args: GameArgs,
         wait_callback: Optional[Callable] = None
-) -> Optional[GameResult]:
+# ) -> Optional[GameResult]:
+) -> None:
     # Check all startup requirements
     if not args.headless:
         check_vnc_exists()
-    if args.headless and args.show_all:
-        raise GameException("Cannot show all screens in headless mode")
 
     # Each game is prefixed with "GAME_"
     # this is needed for game filtering in docker ps
@@ -68,12 +61,12 @@ def run_game(
 
     # Prepare players
     if args.bot is None:
-        args.bot = []
+        args.bot = None
 
     bot_storages = (
         LocalBotStorage(args.bot_dir),
     )
-    player = retrieve_bot(args.bots, bot_storages)
+    player = retrieve_bot(args.bot, bot_storages)
 
     opts = [] if not args.opt else args.opt.split(" ")
 
@@ -99,12 +92,10 @@ def run_game(
         # game settings
         headless=args.headless,
         game_name=game_name,
-        map_name=args.map,
+        # map_name=args.map,
+        replay_name=args.replay,
         game_speed=args.game_speed,
-        timeout=args.timeout,
         allow_input=args.allow_input,
-        auto_launch=args.auto_launch,
-        random_names=args.random_names,
 
         # mount dirs
         game_dir=args.game_dir,
@@ -146,45 +137,37 @@ def run_game(
     if args.plot_realtime:
         plot_realtime.save(f"{args.game_dir}/{game_name}/frame_plot.png")
 
-    if is_1v1_game:
-        game_time = time.time() - time_start
-        game_result = GameResult(
-            game_name, players, game_time,
-            # game error states
-            is_realtime_outed,
-            # dirs with results
-            args.map_dir, args.game_dir
-        )
+    game_time = time.time() - time_start
+    # game_result = GameResult(
+    #     game_name, player, game_time,
+    #     # game error states
+    #     is_realtime_outed,
+    #     # dirs with results
+    #     args.map_dir, args.game_dir
+    # )
 
-        info = launch_params.copy()
-        info.update(dict(
-            read_overwrite=args.read_overwrite,
-            bots=args.bots,
+    # info = launch_params.copy()
+    # info.update(dict(
+    #     read_overwrite=args.read_overwrite,
+    #     bot=args.bot,
+    #
+    #     is_crashed=game_result.is_crashed,
+    #     game_time=game_result.game_time,
+    # ))
+    # if game_result.is_valid:
+    #     info.update(dict(
+    #         winner=game_result.winner_player.name,
+    #         loser=game_result.loser_player.name,
+    #         winner_race=game_result.winner_player.race.value,
+    #         loser_race=game_result.loser_player.race.value,
+    #     ))
 
-            is_crashed=game_result.is_crashed,
-            is_gametime_outed=game_result.is_gametime_outed,
-            is_realtime_outed=game_result.is_realtime_outed,
-            game_time=game_result.game_time,
-
-            winner=None,
-            loser=None,
-            winner_race=None,
-            loser_race=None,
-        ))
-        if game_result.is_valid:
-            info.update(dict(
-                winner=game_result.winner_player.name,
-                loser=game_result.loser_player.name,
-                winner_race=game_result.winner_player.race.value,
-                loser_race=game_result.loser_player.race.value,
-            ))
-
-        logger.debug(info)
-        with open(f"{args.game_dir}/{game_name}/result.json", "w") as f:
-            json.dump(info, f, cls=EnumEncoder)
-        logger.info(f"game {game_name} recorded")
-
-        return game_result
+    # logger.debug(info)
+    # with open(f"{args.game_dir}/{game_name}/result.json", "w") as f:
+    #     json.dump(info, f, cls=EnumEncoder)
+    # logger.info(f"game {game_name} recorded")
+    #
+    # return game_result
 
     return None
 

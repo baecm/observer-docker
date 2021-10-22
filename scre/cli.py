@@ -31,7 +31,7 @@ parser.add_argument('--bot', type=bot_regex,
                          'The bot is looked up in the --bot_dir directory.\n'
                          '  --bot REPLAY_EXTRACTOR')
 parser.add_argument('--replay', type=str, metavar="REPLAY.rep",
-                    default="replays/LastReplay.rep",
+                    default="1-2-3-UAI12.rep",
                     help="Name of replay on which SC should be played,\n"
                          "relative to --replay_dir")
 parser.add_argument('--headless', action='store_true',
@@ -150,37 +150,37 @@ def main():
 
     try:
         game_result = run_game(args)
-        if game_result is None:
-            logger.info("Game results are available only for 1v1 (bot vs bot) games.")
-            sys.exit(0)
-
-        logger.info(f"Game {game_result.game_name} "
-                    f"finished in {game_result.game_time:.2f} seconds.")
-        logger.info("---")
-        logger.info("Logs are saved here:")
-        for log_file in sorted(game_result.log_files):
-            logger.info(log_file)
-        logger.info("---")
-
-        logger.info("Frame information is saved here:")
-        for frame_file in sorted(game_result.frame_files):
-            logger.info(frame_file)
-        logger.info("---")
-
-        logger.info("Game results are saved here:")
-        for frame_file in sorted(game_result.score_files):
-            logger.info(frame_file)
-        logger.info("---")
-
-        if game_result.is_realtime_outed:
-            logger.error("Game has realtime outed!")
-            sys.exit(1)
-        if game_result.is_gametime_outed:
-            logger.error("Game has gametime outed!")
-            sys.exit(1)
-        if game_result.is_crashed:
-            logger.error("Game has crashed!")
-            sys.exit(1)
+        # if game_result is None:
+        #     logger.info("Game results are available only for 1v1 (bot vs bot) games.")
+        #     sys.exit(0)
+        #
+        # logger.info(f"Game {game_result.game_name} "
+        #             f"finished in {game_result.game_time:.2f} seconds.")
+        # logger.info("---")
+        # logger.info("Logs are saved here:")
+        # for log_file in sorted(game_result.log_files):
+        #     logger.info(log_file)
+        # logger.info("---")
+        #
+        # logger.info("Frame information is saved here:")
+        # for frame_file in sorted(game_result.frame_files):
+        #     logger.info(frame_file)
+        # logger.info("---")
+        #
+        # logger.info("Game results are saved here:")
+        # for frame_file in sorted(game_result.score_files):
+        #     logger.info(frame_file)
+        # logger.info("---")
+        #
+        # if game_result.is_realtime_outed:
+        #     logger.error("Game has realtime outed!")
+        #     sys.exit(1)
+        # if game_result.is_gametime_outed:
+        #     logger.error("Game has gametime outed!")
+        #     sys.exit(1)
+        # if game_result.is_crashed:
+        #     logger.error("Game has crashed!")
+        #     sys.exit(1)
 
     except ScreException as e:
         logger.exception(e)

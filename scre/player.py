@@ -87,7 +87,6 @@ class BotPlayer(Player):
         self._check_structure()
         self.meta = self._read_meta()
         self.name = self.meta.name
-        self.race = self.meta.race
         self.bot_type = self.meta.botType
         self.bot_filename = self._find_bot_filename(self.meta.botType)
         self.bwapi_version = self._find_bwapi_version()
@@ -156,7 +155,6 @@ class BotPlayer(Player):
     def parse_meta(json_spec: Dict) -> BotJsonMeta:
         meta = BotJsonMeta()
         meta.name = json_spec['name']
-        meta.race = PlayerRace[json_spec['race'].upper()]
         bot_type = json_spec['botType']
         if bot_type == "JAVA_JNI" or bot_type == "JAVA_MIRROR":
             bot_type = "JAVA"
@@ -175,24 +173,25 @@ class BotPlayer(Player):
 
 
     def _find_bwapi_version(self) -> str:
-        bwapi_md5_hash = md5_file(self.bwapi_dll_file)
-        if bwapi_md5_hash not in versions_md5s.values():
-            raise PlayerException(
-                f'''
-                Bot uses unrecognized version of BWAPI, with md5 hash {bwapi_md5_hash}.
-                Supported versions are: {', '.join(supported_versions)}
-                '''
-            )
-        version = [version for version, bwapi_hash in versions_md5s.items()
-                   if bwapi_hash == bwapi_md5_hash][0]
-        if version not in supported_versions:
-            raise PlayerException(
-                f'''
-                Bot uses unsupported version of BWAPI: {version}.
-                Supported versions are: {', '.join(supported_versions)}
-                '''
-            )
-        return version
+        return "4.2.0"
+        # bwapi_md5_hash = md5_file(self.bwapi_dll_file)
+        # if bwapi_md5_hash not in versions_md5s.values():
+        #     raise PlayerException(
+        #         f'''
+        #         Bot uses unrecognized version of BWAPI, with md5 hash {bwapi_md5_hash}.
+        #         Supported versions are: {', '.join(supported_versions)}
+        #         '''
+        #     )
+        # version = [version for version, bwapi_hash in versions_md5s.items()
+        #            if bwapi_hash == bwapi_md5_hash][0]
+        # if version not in supported_versions:
+        #     raise PlayerException(
+        #         f'''
+        #         Bot uses unsupported version of BWAPI: {version}.
+        #         Supported versions are: {', '.join(supported_versions)}
+        #         '''
+        #     )
+        # return version
 
 
 

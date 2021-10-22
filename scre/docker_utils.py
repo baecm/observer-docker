@@ -203,9 +203,7 @@ def launch_image(
         game_name: str,
         replay_name: str,
         game_speed: int,
-        timeout: Optional[int],
         allow_input: bool,
-        auto_launch: bool,
 
         # mount dirs
         game_dir: str,
@@ -258,13 +256,9 @@ def launch_image(
 
         EXIT_CODE_REALTIME_OUTED=EXIT_CODE_REALTIME_OUTED,
         CAPTURE_MOUSE_MOVEMENT="1" if capture_movement else "0",
-        HEADFUL_AUTO_LAUNCH="1" if auto_launch else "0",
 
         JAVA_DEBUG="0"
     )
-
-    if timeout is not None:
-        env["PLAY_TIMEOUT"] = timeout
 
     if isinstance(player, BotPlayer):
         # Only mount write directory, read and AI
@@ -405,14 +399,14 @@ def launch_game(
     running_time = time.time()
     while True:
         containers = running_containers(game_name)
-        if len(containers) == 0:  # game finished
-            break
-        if len(containers) >= 2:  # update the last time when there were multiple containers
-            running_time = time.time()
-        if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
-            raise ContainerException(
-                f"One lingering container has been found after single container "
-                f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
+        # if len(containers) == 0:  # game finished
+        #     break
+        # if len(containers) >= 2:  # update the last time when there were multiple containers
+        #     running_time = time.time()
+        # if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
+        #     raise ContainerException(
+        #         f"One lingering container has been found after single container "
+        #         f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
         logger.debug(f"waiting. {containers}")
         wait_callback()
 

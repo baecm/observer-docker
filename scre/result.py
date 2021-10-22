@@ -44,7 +44,7 @@ class GameResult:
     def __init__(
             self,
             game_name: str,
-            players: List[Player],
+            player: Player,
             game_time: float,
             is_realtime_outed: bool,
             map_dir: str,
@@ -52,7 +52,7 @@ class GameResult:
     ) -> None:
         self.game_name = game_name
         self.game_time = game_time
-        self.players = players
+        self.player = player
 
         self.map_dir = map_dir
         self.game_dir = game_dir
@@ -79,19 +79,9 @@ class GameResult:
         # this whole processing assumes 1v1 bot vs bot games
         if self._is_processed:
             return
-
         self._is_processed = True
 
         if self.is_realtime_outed:
-            return
-
-        num_players = len(self.players)
-
-        if len(self.score_files) != num_players:
-            logger.warning(f"Not all score files have been recorded for game '{self.game_name}'")
-            logger.warning(f"Expected {num_players} score files, got {len(self.score_files)}")
-            logger.warning("Assuming a crash happened.")
-            self._is_crashed = True
             return
 
         scores = {score_file: ScoreResult.load_score(score_file)
@@ -114,13 +104,13 @@ class GameResult:
             self._is_crashed = True
             return
 
-        winner_score_file = [file for file, score in scores.items() if score.is_winner][0]
-        nth_player = int(winner_score_file.replace("/scores.json", "").replace("\\scores.json", "").split("_")[-1])
+        # winner_score_file = [file for file, score in scores.items() if score.is_winner][0]
+        # nth_player = int(winner_score_file.replace("/scores.json", "").replace("\\scores.json", "").split("_")[-1])
 
-        self._nth_winner_player = nth_player
-        self._nth_loser_player = 1 - nth_player
-        self._winner_player = self.players[self._nth_winner_player]
-        self._loser_player = self.players[self._nth_loser_player]
+        # self._nth_winner_player = nth_player
+        # self._nth_loser_player = 1 - nth_player
+        # self._winner_player = self.players[self._nth_winner_player]
+        # self._loser_player = self.players[self._nth_loser_player]
         self._is_crashed = False
         # todo: implement, maybe according to SSCAIT rules?
         self._is_gametime_outed = False
