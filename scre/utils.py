@@ -9,10 +9,7 @@ import zipfile
 import requests
 import tqdm
 
-
-
 logger = logging.getLogger(__name__)
-
 
 
 def levenshtein_dist(s1: str, s2: str) -> int:

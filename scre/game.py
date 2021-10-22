@@ -8,8 +8,8 @@ import time
 from argparse import Namespace
 from typing import List, Optional, Callable
 
-from scre.bot_factory import retrieve_bots
-from scre.bot_storage import LocalBotStorage, SscaitBotStorage
+from scre.bot_factory import retrieve_bot
+from scre.bot_storage import LocalBotStorage
 from scre.docker_utils import (
     dockermachine_ip, launch_game,
     remove_game_containers
@@ -59,8 +59,6 @@ def run_game(
     # Check all startup requirements
     if not args.headless:
         check_vnc_exists()
-    if args.human and args.headless:
-        raise GameException("Cannot use human play in headless mode")
     if args.headless and args.show_all:
         raise GameException("Cannot show all screens in headless mode")
 
@@ -69,19 +67,13 @@ def run_game(
     game_name = "GAME_" + args.game_name
 
     # Prepare players
-    players = []
-    if args.human:
-        players.append(HumanPlayer())
-    if args.bots is None:
-        args.bots = []
+    if args.bot is None:
+        args.bot = []
 
     bot_storages = (
         LocalBotStorage(args.bot_dir),
-        SscaitBotStorage(args.bot_dir)
     )
-    players += retrieve_bots(args.bots, bot_storages)
-
-    is_1v1_game = len(players) == 2
+    player = retrieve_bot(args.bots, bot_storages)
 
     opts = [] if not args.opt else args.opt.split(" ")
 
@@ -94,7 +86,7 @@ def run_game(
         wait_callback = lambda: time.sleep(3)
 
     if args.plot_realtime:
-        plot_realtime = RealtimeFramePlotter(args.game_dir, game_name, players)
+        plot_realtime = RealtimeFramePlotter(args.game_dir, game_name, player)
 
         def _wait_callback():
             plot_realtime.redraw()
@@ -108,13 +100,8 @@ def run_game(
         headless=args.headless,
         game_name=game_name,
         map_name=args.map,
-        game_type=GameType(args.game_type),
         game_speed=args.game_speed,
         timeout=args.timeout,
-        hide_names=args.hide_names,
-        drop_players=any(isinstance(player, BotPlayer)
-                         and player.meta.javaDebugPort is not None
-                         for player in players),
         allow_input=args.allow_input,
         auto_launch=args.auto_launch,
         random_names=args.random_names,
@@ -140,7 +127,7 @@ def run_game(
     is_realtime_outed = False
     try:
         launch_game(
-            players, launch_params, args.show_all,
+            player, launch_params, args.show_all,
             args.read_overwrite, _wait_callback
         )
     except RealtimeOutedException:
@@ -158,16 +145,6 @@ def run_game(
 
     if args.plot_realtime:
         plot_realtime.save(f"{args.game_dir}/{game_name}/frame_plot.png")
-
-    # move replay files
-    replay_files = set(
-        # there are at most 8 players for a game
-        glob.glob(f"{args.map_dir}/replays/{game_name}_[0-7].rep") +
-        glob.glob(f"{args.map_dir}/replays/{game_name}_[0-7].REP")
-    )
-    for replay_file in replay_files:
-        nth_player = int(replay_file[:-4].split("_")[-1])
-        os.rename(replay_file, f"{args.game_dir}/{game_name}/player_{nth_player}.rep")
 
     if is_1v1_game:
         game_time = time.time() - time_start

@@ -17,7 +17,8 @@ SC_GAME_DIR = f"{SCRE_BASE_DIR}/games"
 SC_BWAPI_DATA_BWTA_DIR = f"{SCRE_BASE_DIR}/bwapi-data/BWTA"
 SC_BWAPI_DATA_BWTA2_DIR = f"{SCRE_BASE_DIR}/bwapi-data/BWTA2"
 SC_BOT_DIR = f"{SCRE_BASE_DIR}/bots"
-SC_MAP_DIR = f"{SCRE_BASE_DIR}/maps"
+SC_MAP_DIR = ('%s/maps' % (SCRE_BASE_DIR, ))
+SC_REPLAY_DIR = f"{SC_MAP_DIR}/replays"
 
 SC_IMAGE = "starcraft:game-" + VERSION
 SC_PARENT_IMAGE = "ggaic/starcraft:java-" + VERSION

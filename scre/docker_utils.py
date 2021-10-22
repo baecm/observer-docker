@@ -197,19 +197,13 @@ def xoscmounts(host_mount):
 def launch_image(
         # players info
         player: Player,
-        nth_player: int,
-        num_players: int,
 
         # game settings
         headless: bool,
         game_name: str,
-        map_name: str,
-        game_type: GameType,
+        replay_name: str,
         game_speed: int,
         timeout: Optional[int],
-        hide_names: bool,
-        random_names: bool,
-        drop_players: bool,
         allow_input: bool,
         auto_launch: bool,
 
@@ -232,10 +226,10 @@ def launch_image(
     :raises docker,errors.APIError
     :raises DockerException
     """
-    container_name = f"{game_name}_{nth_player}_{player.name.replace(' ', '_')}"
+    container_name = f"{game_name}_{player.name.replace(' ', '_')}"
 
-    log_dir = f"{game_dir}/{game_name}/logs_{nth_player}"
-    crashes_dir = f"{game_dir}/{game_name}/crashes_{nth_player}"
+    log_dir = f"{game_dir}/{game_name}/logs"
+    crashes_dir = f"{game_dir}/{game_name}/crashes"
     os.makedirs(log_dir, mode=0o777, exist_ok=True)  # todo: proper mode
     os.makedirs(crashes_dir, mode=0o777, exist_ok=True)  # todo: proper mode
 
@@ -249,19 +243,13 @@ def launch_image(
 
     ports = {}
     if not headless:
-        ports.update({"5900/tcp": vnc_base_port + nth_player})
+        ports.update({"5900/tcp": vnc_base_port})
 
     env = dict(
-        PLAYER_NAME=player.name if not random_names else random_string(8),
-        PLAYER_RACE=player.race.value,
-        NTH_PLAYER=nth_player,
-        NUM_PLAYERS=num_players,
+        PLAYER_NAME=player.name,
         GAME_NAME=game_name,
-        MAP_NAME=f"/app/sc/maps/{map_name}",
-        GAME_TYPE=game_type.value,
+        REPLAY_NAME=f"/app/sc/maps/replays/{replay_name}",
         SPEED_OVERRIDE=game_speed,
-        HIDE_NAMES="1" if hide_names else "0",
-        DROP_PLAYERS="1" if drop_players else "0",
 
         TM_LOG_RESULTS=f"../logs/scores.json",
         TM_LOG_FRAMETIMES=f"../logs/frames.csv",
@@ -281,7 +269,7 @@ def launch_image(
     if isinstance(player, BotPlayer):
         # Only mount write directory, read and AI
         # are copied from the bot directory in proper places in bwapi-data
-        bot_data_write_dir = f"{game_dir}/{game_name}/write_{nth_player}/"
+        bot_data_write_dir = f"{game_dir}/{game_name}/write/"
         os.makedirs(bot_data_write_dir, mode=0o777, exist_ok=True)  # todo: proper mode
         volumes.update({
             xoscmounts(bot_data_write_dir): {"bind": BOT_DATA_WRITE_DIR, "mode": "rw"},
@@ -308,20 +296,14 @@ def launch_image(
                 forward, local = [int(x) for x in player.meta.port.split(':')]
                 ports.update({str(local) + '/tcp': forward})
     else:
-        command = ["/app/play_human.sh"]
-
-    is_server = nth_player == 0
+        pass
 
     entrypoint_opts = ["--headful"]
     if headless:
         entrypoint_opts = [
             "--game", game_name, "--name", player.name,
-            "--race", player.race.value, "--lan"
         ]
-        if is_server:
-            entrypoint_opts += ["--host", "--map", f"/app/sc/maps/{map_name}"]
-        else:
-            entrypoint_opts += ["--join"]
+        entrypoint_opts += ["--host", "--map", f"/app/sc/maps/replays/{replay_name}"]
     command += entrypoint_opts
 
     logger.debug(
@@ -383,7 +365,7 @@ def container_exit_code(container_id: str) -> Optional[int]:
 
 
 def launch_game(
-        players: List[Player],
+        player: Player,
         launch_params: Dict[str, Any],
         show_all: bool,
         read_overwrite: bool,
@@ -392,7 +374,7 @@ def launch_game(
     """
     :raises DockerException, ContainerException, RealtimeOutedException
     """
-    if not players:
+    if not player:
         raise GameException("at least one player must be specified")
 
     game_dir = launch_params["game_dir"]
@@ -402,21 +384,17 @@ def launch_game(
         logger.info(f"removing existing game results of {game_name}")
         shutil.rmtree(f"{game_dir}/{game_name}")
 
-    for nth_player, player in enumerate(players):
-        launch_image(player, nth_player=nth_player, num_players=len(players), **launch_params)
+    launch_image(player, **launch_params)
 
     logger.debug("checking if game has launched properly...")
     time.sleep(1)
     start_containers = running_containers(game_name + "_")
-    if len(start_containers) != len(players):
-        raise DockerException("some containers exited prematurely, please check logs")
 
     if not launch_params["headless"]:
-        for index, player in enumerate(players if show_all else players[:1]):
-            port = launch_params["vnc_base_port"] + index
-            host = launch_params["vnc_host"]
-            logger.info(f"launching vnc viewer for {player} on address {host}:{port}")
-            launch_vnc_viewer(host, port)
+        port = launch_params["vnc_base_port"]
+        host = launch_params["vnc_host"]
+        logger.info(f"launching vnc viewer for {player} on address {host}:{port}")
+        launch_vnc_viewer(host, port)
 
         logger.info("\n"
                     "In headful mode, you must specify and start the game manually.\n"
@@ -451,10 +429,9 @@ def launch_game(
 
     if read_overwrite:
         logger.info("overwriting bot files")
-        for nth_player, player in enumerate(players):
-            if isinstance(player, BotPlayer):
-                logger.debug(f"overwriting files for {player}")
-                distutils.dir_util.copy_tree(
-                    f"{game_dir}/{game_name}/write_{nth_player}",
-                    player.read_dir
-                )
+        if isinstance(player, BotPlayer):
+            logger.debug(f"overwriting files for {player}")
+            distutils.dir_util.copy_tree(
+                f"{game_dir}/{game_name}/write",
+                player.read_dir
+            )

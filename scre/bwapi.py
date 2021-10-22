@@ -1,4 +1,3 @@
-
 versions_md5s = {
     "4.2.0": "2f6fb401c0dcf65925ee7ad34dc6414a",
     "4.1.2": "1364390d0aa085fba6ac11b7177797b0",
@@ -6,7 +5,6 @@ versions_md5s = {
     "3.7.5": "5e590ea55c2d3c66a36bf75537f8655a",
     "3.7.4": "6e940dc6acc76b6e459b39a9cdd466ae",
 }
-
 
 # Version is supported, if we have a functioning tournament module (TM) binary for it.
 supported_versions = [
