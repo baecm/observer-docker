@@ -5,7 +5,7 @@ from scre.player import BotPlayer
 
 
 def retrieve_bot(
-        bot_name: Iterable[str],
+        bot_name: str,
         bot_storages: Iterable[BotStorage]
 ) -> BotPlayer:
     bot = None

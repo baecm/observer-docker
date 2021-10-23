@@ -75,6 +75,7 @@ def run_game(
         logger.debug(f"Using vnc host '{args.vnc_host}'")
 
     # make sure we always have a sleeping wait callback!
+
     if wait_callback is None:
         wait_callback = lambda: time.sleep(3)
 
@@ -113,7 +114,6 @@ def run_game(
         docker_image=args.docker_image,
         docker_opts=opts,
     )
-
     time_start = time.time()
     is_realtime_outed = False
     try:

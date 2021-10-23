@@ -28,8 +28,8 @@ logging.getLogger('urllib3.connectionpool').propagate = False
 
 docker_client = docker.from_env()
 
-DOCKER_STARCRAFT_NETWORK = "sc_net"
-SUBNET_CIDR = "172.18.0.0/16"
+# DOCKER_STARCRAFT_NETWORK = "sc_net"
+SUBNET_CIDR = "192.168.65.0/24"
 BASE_VNC_PORT = 5900
 VNC_HOST = "localhost"
 APP_DIR = "/app"
@@ -70,24 +70,24 @@ def ensure_docker_can_run() -> None:
     logger.debug(f"using docker API version {version}")
 
 
-def ensure_local_net(
-        network_name: str = DOCKER_STARCRAFT_NETWORK,
-        subnet_cidr: str = SUBNET_CIDR
-) -> None:
-    """
-    Create docker local net if not found.
-
-    :raises docker.errors.APIError
-    """
-    logger.info(f"checking whether docker has network {network_name}")
-    ipam_pool = docker.types.IPAMPool(subnet=subnet_cidr)
-    ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
-    networks = docker_client.networks.list(names=DOCKER_STARCRAFT_NETWORK)
-    output = networks[0].short_id if networks else None
-    if not output:
-        logger.info("network not found, creating ...")
-        output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
-    logger.debug(f"docker network id: {output}")
+# def ensure_local_net(
+#         network_name: str = DOCKER_STARCRAFT_NETWORK,
+#         subnet_cidr: str = SUBNET_CIDR
+# ) -> None:
+#     """
+#     Create docker local net if not found.
+#
+#     :raises docker.errors.APIError
+#     """
+#     logger.info(f"checking whether docker has network {network_name}")
+#     ipam_pool = docker.types.IPAMPool(subnet=subnet_cidr)
+#     ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
+#     networks = docker_client.networks.list(names=DOCKER_STARCRAFT_NETWORK)
+#     output = networks[0].short_id if networks else None
+#     if not output:
+#         logger.info("network not found, creating ...")
+#         output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
+#     logger.debug(f"docker network id: {output}")
 
 
 def ensure_local_image(
@@ -246,7 +246,8 @@ def launch_image(
     env = dict(
         PLAYER_NAME=player.name,
         GAME_NAME=game_name,
-        REPLAY_NAME=f"/app/sc/maps/replays/{replay_name}",
+        MAP_NAME=('/app/sc/maps/replays/%s' % (replay_name,)),
+
         SPEED_OVERRIDE=game_speed,
 
         TM_LOG_RESULTS=f"../logs/scores.json",
@@ -259,6 +260,7 @@ def launch_image(
 
         JAVA_DEBUG="0"
     )
+
 
     if isinstance(player, BotPlayer):
         # Only mount write directory, read and AI
@@ -324,6 +326,7 @@ def launch_image(
         network=DOCKER_STARCRAFT_NETWORK,
         ports=ports
     )
+
     if container:
         container_id = running_containers(container_name)
         logger.info(f"launched {player}")
@@ -399,14 +402,6 @@ def launch_game(
     running_time = time.time()
     while True:
         containers = running_containers(game_name)
-        # if len(containers) == 0:  # game finished
-        #     break
-        # if len(containers) >= 2:  # update the last time when there were multiple containers
-        #     running_time = time.time()
-        # if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
-        #     raise ContainerException(
-        #         f"One lingering container has been found after single container "
-        #         f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
         logger.debug(f"waiting. {containers}")
         wait_callback()
 
