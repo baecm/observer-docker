@@ -11,7 +11,7 @@ LOG_GAME="${LOG_DIR}/game.log"
 LOG_BOT="${LOG_DIR}/bot.log"
 BOT_TYPE="${BOT_FILE##*.}"
 DATE=$(date +%Y-%m-%d)
-REPLAY_FILE="${GAME_NAME}_${NTH_PLAYER}.rep"
+REPLAY_FILE="${GAME_NAME}_.rep"
 
 . play_common.sh
 
@@ -43,7 +43,7 @@ sleep 1
 start_game "$@"
 sleep 3
 
-if [ "$IS_HEADFUL" == "1" ] && [ $NTH_PLAYER == "0" ] && [ "$HEADFUL_AUTO_LAUNCH" == "1" ]; then # if is_server
+if [ "$IS_HEADFUL" == "1" ] &&  [ "$HEADFUL_AUTO_LAUNCH" == "1" ]; then # if is_server
     auto_launch
 fi
 
