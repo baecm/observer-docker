@@ -9,7 +9,7 @@ from scbw.defaults import VERSION
 
 
 setup(
-    name='scbw',
+    name='scbw-cog',
     version=VERSION,
     description='Multi-platform Version of StarCraft: Brood War in a Docker Container',
     url='https://github.com/baecm/sc-docker',
@@ -45,7 +45,7 @@ setup(
     # packages=['scbw'],
     entry_points={  # Optional
         'console_scripts': [
-            'scbw.play=scbw.cli:main',
+            'scbw-cog.play=scbw.cli:main',
         ],
     },
     python_requires='>=3.4',

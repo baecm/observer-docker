@@ -6,7 +6,7 @@ import sys
 import coloredlogs
 import docker
 from scbw.defaults import (
-    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, SC_REPLAY_DIR, SCRE_BASE_DIR, SC_IMAGE,
+    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, SCBW_BASE_DIR, SC_IMAGE,
     SC_BWAPI_DATA_BWTA_DIR, SC_BWAPI_DATA_BWTA2_DIR, VERSION
 )
 from scbw.docker_utils import BASE_VNC_PORT, VNC_HOST
@@ -50,8 +50,6 @@ parser.add_argument('--game_dir', type=str, default=SC_GAME_DIR,
                     help=f"Directory where game logs and results are stored, default:\n{SC_GAME_DIR}")
 parser.add_argument('--map_dir', type=str, default=SC_MAP_DIR,
                     help=f"Directory where maps are stored, default:\n{SC_MAP_DIR}")
-parser.add_argument('--replay_dir', type=str, default=SC_REPLAY_DIR,
-                    help=f"Directory where replays are stored, default: \n{SC_REPLAY_DIR}")
 #  BWAPI data volumes
 parser.add_argument('--bwapi_data_bwta_dir', type=str, default=SC_BWAPI_DATA_BWTA_DIR,
                     help=f"Directory where BWTA map caches are stored, "
@@ -131,8 +129,8 @@ def main():
         except KeyboardInterrupt:
             sys.exit(1)
 
-    if not os.path.exists(SCRE_BASE_DIR):
-        parser.error(f'The data directory {SCRE_BASE_DIR} was not found. '
+    if not os.path.exists(SCBW_BASE_DIR):
+        parser.error(f'The data directory {SCBW_BASE_DIR} was not found. '
                      f'Did you run "scbw.play --install"?')
         # parser.error exits
 

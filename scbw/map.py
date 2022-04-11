@@ -8,7 +8,6 @@ from scbw.error import GameException
 from scbw.utils import download_extract_zip
 
 SC_MAP_DIR = os.path.abspath("maps")
-SC_REPLAY_DIR = os.path.abspath("maps/replays")
 logger = logging.getLogger(__name__)
 
 
