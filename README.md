@@ -43,19 +43,19 @@ Testing and reporting in other settings is very welcome!
 
 Launch headful play of [krasi0](http://sscaitournament.com/index.php?action=botDetails&bot=krasi0) and [CherryPi](https://sscaitournament.com/index.php?action=botDetails&bot=CherryPi) on default map.
 
-    $ scre.play --bots "krasi0" "CherryPi" --show_all
+    $ scbw.play --bots "krasi0" "CherryPi" --show_all
 
 Create game on the server (VNC viewer on port 5900) and wait for bots to join the game.
 
 ### Play against a bot
 
-    $ scre.play --bots "PurpleWave" --human
+    $ scbw.play --bots "PurpleWave" --human
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 
-You can put the RealVNC client to fullscreen and play comfortably.
+You can put the RealVNC client to fullscbwen and play comfortably.
 
-(Although you might want to change your screen resolution to 800x600)
+(Although you might want to change your scbwen resolution to 800x600)
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 

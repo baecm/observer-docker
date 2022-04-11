@@ -88,7 +88,7 @@ function start_gui() {
 
     # Launch the GUI!
     LOG "Starting X, savings logs to " "$LOG_XVFB"
-    Xvfb :0 -auth ~/.Xauthority -screen 0 640x480x24 >> "$LOG_XVFB" 2>&1 &
+    Xvfb :0 -auth ~/.Xauthority -scbwen 0 640x480x24 >> "$LOG_XVFB" 2>&1 &
     sleep 1
 
     LOG "Starting VNC server" "$LOG_XVNC"
@@ -211,7 +211,7 @@ function detect_game_finished() {
 }
 
 function update_registry() {
-    # disable splash screen
+    # disable splash scbwen
     REG_KEY="HKEY_LOCAL_MACHINE\SOFTWARE\Blizzard Entertainment\Starcraft"
 #    wine REG ADD "${REG_KEY}" /v Gamma /t REG_DWORD /d 0000008c
     wine REG ADD "${REG_KEY}" /v ColorCycle /t REG_DWORD /d 00000001

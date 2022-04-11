@@ -52,7 +52,7 @@ RUN set -x \
   && apt-get update -y \
   && apt-get install -y --no-install-recommends --allow-unauthenticated\
     xvfb xauth x11vnc x11-utils x11-xserver-utils xdotool \
-    curl unzip software-properties-common joe vim sudo wget curl tree screen tmux p7zip apt-transport-https winbind \
+    curl unzip software-properties-common joe vim sudo wget curl tree scbwen tmux p7zip apt-transport-https winbind \
     binutils cabextract unrar zenity \
   && curl -L https://dl.winehq.org/wine-builds/Release.key -o Release.key \
   && apt-key add Release.key \

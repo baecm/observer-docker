@@ -4,12 +4,12 @@ load 'libs/bats-support/load'
 load 'libs/bats-assert/load'
 
 
-@test "scre.play is installed" {
-    command -v scre.play
+@test "scbw.play is installed" {
+    command -v scbw.play
 }
 
 @test "ExampleBot loses against ZZZKBot" {
-    TEST_DIR=/tmp/scre_test
+    TEST_DIR=/tmp/scbw_test
 
     # Delete lingering test dir
     [ -d $TEST_DIR ] && rm -rf $TEST_DIR
@@ -19,7 +19,7 @@ load 'libs/bats-assert/load'
     cp -r ZZZKBot $TEST_DIR/bots
     cp maps/\(2\)Benzene.scx $TEST_DIR/maps
 
-    run scre.play \
+    run scbw.play \
         --bots ExampleBot ZZZKBot \
         --log_level=WARN \
         --game_speed=0 \

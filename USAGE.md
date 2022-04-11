@@ -2,7 +2,7 @@
 
 ## Help
 
-    $ scre.play -h
+    $ scbw.play -h
 
 Contains a lot of options, quite well documented.
 
@@ -10,12 +10,12 @@ Contains a lot of options, quite well documented.
 
 Launch headful play of [PurpleWave](https://sscaitournament.com/index.php?action=botDetails&bot=PurpleWave) and [CherryPi](https://sscaitournament.com/index.php?action=botDetails&bot=CherryPi) on default map.
 
-    $ scre.play --bots "PurpleWave" "CherryPi" --show_all
+    $ scbw.play --bots "PurpleWave" "CherryPi" --show_all
 
 **Note**: If you are running Docker Toolbox, and automatical IP address discovery
 for Docker machine does not work, you may need run bots like that:
 
-    $ scre.play --bots "PurpleWave" "CherryPi" --show_all --vnc_host 192.168.99.100
+    $ scbw.play --bots "PurpleWave" "CherryPi" --show_all --vnc_host 192.168.99.100
 
 where the 192.168.99.100 is address of your VM where docker machine is running.
 
@@ -25,13 +25,13 @@ Simply add `--headless` option.
 
 ## Play against bot
 
-    $ scre.play --bots "PurpleWave" --human
+    $ scbw.play --bots "PurpleWave" --human
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 
-You can put the RealVNC client to fullscreen and play comfortably.
+You can put the RealVNC client to fullscbwen and play comfortably.
 
-(Although you might want to change your screen resolution to 800x600)
+(Although you might want to change your scbwen resolution to 800x600)
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
@@ -48,7 +48,7 @@ and one Linux (client, where the bot plays).
 
 Create the game as a human player, and then run
 
-    $ scre.play --bots "PurpleWave" --opt "--net host"
+    $ scbw.play --bots "PurpleWave" --opt "--net host"
 
 This will bind the StarCraft ports to the host machine instead of virtual
 network `sc_net`. (That's also why you need two computers).
@@ -68,8 +68,8 @@ Stop all running games in docker containers (container names always begin with `
 
 Just run
 
-    $ pip install scre==XXX
-    $ scre.play --install
+    $ pip install scbw==XXX
+    $ scbw.play --install
 
 ## Development
 
@@ -113,7 +113,7 @@ Use this structure:
 
 Now you should be able to play game:
 
-    $ scre.play --bots "NEW BOT" "krasi0"
+    $ scbw.play --bots "NEW BOT" "krasi0"
 
 ### Developing sc-docker
 
@@ -127,5 +127,5 @@ To install develeopment version of the package, use
 
     $ pip install -e .
 
-in the project root. Now you can call all the `scre.play` scripts,
+in the project root. Now you can call all the `scbw.play` scripts,
 and it should call the current source code version (see `pip` for more details).
