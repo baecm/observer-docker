@@ -85,7 +85,7 @@ class GameResult:
             return
 
         scores = {score_file: ScoreResult.load_score(score_file)
-                   for score_file in sorted(self.score_files)}
+                  for score_file in sorted(self.score_files)}
         if any(score.is_crashed for score in scores.values()):
             logger.warning(f"Some of the players crashed in game '{self.game_name}'")
             self._is_crashed = True

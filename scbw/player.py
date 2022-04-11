@@ -14,12 +14,9 @@ from scbw.bwapi import supported_versions, versions_md5s
 from scbw.error import PlayerException
 from scbw.utils import md5_file
 
-
-
 logger = logging.getLogger(__name__)
 
 SC_BOT_DIR = os.path.abspath("bots")
-
 
 
 class PlayerRace(enum.Enum):
@@ -29,20 +26,16 @@ class PlayerRace(enum.Enum):
     RANDOM = 'R'
 
 
-
 class Player:
     name = "noname"
     race = PlayerRace.RANDOM
-
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}:{self.name}:{self.race.value}"
 
 
-
 class HumanPlayer(Player):
     name = "human"
-
 
 
 class BotType(enum.Enum):
@@ -50,7 +43,6 @@ class BotType(enum.Enum):
     EXE = "exe"
     JAVA = "jar"
     JYTHON = "jython"
-
 
 
 class BotJsonMeta:
@@ -66,8 +58,8 @@ class BotJsonMeta:
     bwapiDLL: Optional[str] = None  # link to website
     botProfileURL: Optional[str] = None  # link to website
     javaDebugPort: Optional[int] = None  # optionally allow attaching debugger
-    javaOpts: Optional[str] = None # optional parameters to JVM
-    port : Optional[str] = None # optionally publish a custom port to the host
+    javaOpts: Optional[str] = None  # optional parameters to JVM
+    port: Optional[str] = None  # optionally publish a custom port to the host
 
 
 class BotPlayer(Player):
@@ -91,12 +83,10 @@ class BotPlayer(Player):
         self.bot_filename = self._find_bot_filename(self.meta.botType)
         self.bwapi_version = self._find_bwapi_version()
 
-
     def _read_meta(self) -> BotJsonMeta:
         with open(f"{self.bot_dir}/bot.json", "r") as f:
             json_spec = json.load(f)
         return self.parse_meta(json_spec)
-
 
     def _find_bot_filename(self, bot_type: BotType) -> str:
         expr = f"{self.ai_dir}/*.{bot_type.value}"
@@ -112,31 +102,25 @@ class BotPlayer(Player):
         else:
             raise Exception(f"Cannot find bot binary, launcher searched for {expr}")
 
-
     @property
     def bot_basefilename(self) -> str:
         return os.path.basename(self.bot_filename)
-
 
     @property
     def bwapi_dll_file(self) -> str:
         return f"{self.bot_dir}/BWAPI.dll"
 
-
     @property
     def bot_json_file(self) -> str:
         return f"{self.bot_dir}/bot.json"
-
 
     @property
     def ai_dir(self) -> str:
         return f"{self.bot_dir}/AI"
 
-
     @property
     def read_dir(self) -> str:
         return f"{self.bot_dir}/read"
-
 
     def _check_structure(self) -> None:
         if not os.path.exists(f"{self.bot_dir}"):
@@ -149,7 +133,6 @@ class BotPlayer(Player):
             raise PlayerException(f"AI folder cannot be found in {self.ai_dir}")
         if not os.path.exists(f"{self.read_dir}"):
             raise PlayerException(f"read folder cannot be found in {self.read_dir}")
-
 
     @staticmethod
     def parse_meta(json_spec: Dict) -> BotJsonMeta:
@@ -171,7 +154,6 @@ class BotPlayer(Player):
 
         return meta
 
-
     def _find_bwapi_version(self) -> str:
         return "4.2.0"
         # bwapi_md5_hash = md5_file(self.bwapi_dll_file)
@@ -192,7 +174,6 @@ class BotPlayer(Player):
         #         '''
         #     )
         # return version
-
 
 
 _races = "|".join([race.value for race in PlayerRace])
