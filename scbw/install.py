@@ -28,7 +28,7 @@ def install() -> None:
 
     # remove old image in case of update
     remove_game_image(SC_IMAGE)
-    ensure_local_image(SC_IMAGE)
+    # ensure_local_image(SC_IMAGE)
 
     create_data_dirs(
         SC_GAME_DIR,
