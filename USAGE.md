@@ -2,7 +2,7 @@
 
 ## Help
 
-    $ scbw.play -h
+    $ scre.play -h
 
 Contains a lot of options, quite well documented.
 
@@ -10,12 +10,12 @@ Contains a lot of options, quite well documented.
 
 Launch headful play of [PurpleWave](https://sscaitournament.com/index.php?action=botDetails&bot=PurpleWave) and [CherryPi](https://sscaitournament.com/index.php?action=botDetails&bot=CherryPi) on default map.
 
-    $ scbw.play --bots "PurpleWave" "CherryPi" --show_all
+    $ scre.play --bots "PurpleWave" "CherryPi" --show_all
 
 **Note**: If you are running Docker Toolbox, and automatical IP address discovery
 for Docker machine does not work, you may need run bots like that:
 
-    $ scbw.play --bots "PurpleWave" "CherryPi" --show_all --vnc_host 192.168.99.100
+    $ scre.play --bots "PurpleWave" "CherryPi" --show_all --vnc_host 192.168.99.100
 
 where the 192.168.99.100 is address of your VM where docker machine is running.
 
@@ -25,7 +25,7 @@ Simply add `--headless` option.
 
 ## Play against bot
 
-    $ scbw.play --bots "PurpleWave" --human
+    $ scre.play --bots "PurpleWave" --human
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 
@@ -48,7 +48,7 @@ and one Linux (client, where the bot plays).
 
 Create the game as a human player, and then run
 
-    $ scbw.play --bots "PurpleWave" --opt "--net host"
+    $ scre.play --bots "PurpleWave" --opt "--net host"
 
 This will bind the StarCraft ports to the host machine instead of virtual
 network `sc_net`. (That's also why you need two computers).
@@ -68,8 +68,8 @@ Stop all running games in docker containers (container names always begin with `
 
 Just run
 
-    $ pip install scbw==XXX
-    $ scbw.play --install
+    $ pip install scre==XXX
+    $ scre.play --install
 
 ## Development
 
@@ -113,7 +113,7 @@ Use this structure:
 
 Now you should be able to play game:
 
-    $ scbw.play --bots "NEW BOT" "krasi0"
+    $ scre.play --bots "NEW BOT" "krasi0"
 
 ### Developing sc-docker
 
@@ -127,5 +127,5 @@ To install develeopment version of the package, use
 
     $ pip install -e .
 
-in the project root. Now you can call all the `scbw.play` scripts,
+in the project root. Now you can call all the `scre.play` scripts,
 and it should call the current source code version (see `pip` for more details).

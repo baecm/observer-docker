@@ -1,7 +1,7 @@
 import os
 import json
 import unittest
-from scbw.player import BotPlayer, PlayerRace, BotType
+from scre.player import BotPlayer, PlayerRace, BotType
 
 class TestBotMetaParsing(unittest.TestCase):
     root_dir = os.path.dirname(__file__)

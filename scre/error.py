@@ -1,16 +1,16 @@
-class ScbwException(Exception):
+class ScreException(Exception):
     pass
 
 
-class GameException(ScbwException):
+class GameException(ScreException):
     pass
 
 
-class PlayerException(ScbwException):
+class PlayerException(ScreException):
     pass
 
 
-class DockerException(ScbwException):
+class DockerException(ScreException):
     pass
 
 

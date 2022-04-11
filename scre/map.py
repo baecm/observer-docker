@@ -4,26 +4,17 @@ import os.path
 import shutil
 import tempfile
 
-from scbw.error import GameException
-from scbw.utils import download_extract_zip
-
-
+from scre.error import GameException
+from scre.utils import download_extract_zip
 
 SC_MAP_DIR = os.path.abspath("maps")
+SC_REPLAY_DIR = os.path.abspath("maps/replays")
 logger = logging.getLogger(__name__)
 
 
-
-def check_map_exists(map_file: str) -> None:
-    if not os.path.exists(map_file):
-        raise GameException(f"Map {map_file} could not be found")
-
-
-def download_sscait_maps(map_dir: str) -> None:
-    logger.info("downloading maps from SSCAI")
-    download_extract_zip(
-        "http://sscaitournament.com/files/sscai_map_pack.zip", map_dir
-    )
+def check_replay_exists(replay_file: str) -> None:
+    if not os.path.exists(replay_file):
+        raise GameException(f"Replay {replay_file} could not be found")
 
 
 def download_bwta_caches(bwta_dir: str, bwta2_dir: str) -> None:

@@ -2,7 +2,7 @@ import logging
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from scbw.logs import find_frames
+from scre.logs import find_frames
 
 logger = logging.getLogger(__name__)
 

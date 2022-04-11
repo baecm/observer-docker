@@ -14,13 +14,13 @@ from typing import List, Optional, Callable, Dict, Any
 import docker
 import docker.errors
 import docker.types
-from scbw.defaults import SCBW_BASE_DIR, SC_PARENT_IMAGE, SC_JAVA_IMAGE, SC_BINARY_LINK
-from scbw.error import ContainerException, DockerException, GameException, RealtimeOutedException
-from scbw.game_type import GameType
-from scbw.logs import find_frames, find_logs, find_replays, find_scores
-from scbw.player import BotPlayer, HumanPlayer, Player
-from scbw.utils import download_file, random_string
-from scbw.vnc import launch_vnc_viewer
+from scre.defaults import SCRE_BASE_DIR, SC_PARENT_IMAGE, SC_JAVA_IMAGE, SC_BINARY_LINK
+from scre.error import ContainerException, DockerException, GameException, RealtimeOutedException
+from scre.game_type import GameType
+from scre.logs import find_frames, find_logs, find_replays, find_scores
+from scre.player import BotPlayer, HumanPlayer, Player
+from scre.utils import download_file, random_string
+from scre.vnc import launch_vnc_viewer
 
 logger = logging.getLogger(__name__)
 # disable docker package spam logging
@@ -28,8 +28,8 @@ logging.getLogger('urllib3.connectionpool').propagate = False
 
 docker_client = docker.from_env()
 
-DOCKER_STARCRAFT_NETWORK = "sc_net"
-SUBNET_CIDR = "172.18.0.0/16"
+# DOCKER_STARCRAFT_NETWORK = "sc_net"
+SUBNET_CIDR = "192.168.65.0/24"
 BASE_VNC_PORT = 5900
 VNC_HOST = "localhost"
 APP_DIR = "/app"
@@ -70,31 +70,31 @@ def ensure_docker_can_run() -> None:
     logger.debug(f"using docker API version {version}")
 
 
-def ensure_local_net(
-        network_name: str = DOCKER_STARCRAFT_NETWORK,
-        subnet_cidr: str = SUBNET_CIDR
-) -> None:
-    """
-    Create docker local net if not found.
-
-    :raises docker.errors.APIError
-    """
-    logger.info(f"checking whether docker has network {network_name}")
-    ipam_pool = docker.types.IPAMPool(subnet=subnet_cidr)
-    ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
-    networks = docker_client.networks.list(names=DOCKER_STARCRAFT_NETWORK)
-    output = networks[0].short_id if networks else None
-    if not output:
-        logger.info("network not found, creating ...")
-        output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
-    logger.debug(f"docker network id: {output}")
+# def ensure_local_net(
+#         network_name: str = DOCKER_STARCRAFT_NETWORK,
+#         subnet_cidr: str = SUBNET_CIDR
+# ) -> None:
+#     """
+#     Create docker local net if not found.
+#
+#     :raises docker.errors.APIError
+#     """
+#     logger.info(f"checking whether docker has network {network_name}")
+#     ipam_pool = docker.types.IPAMPool(subnet=subnet_cidr)
+#     ipam_config = docker.types.IPAMConfig(pool_configs=[ipam_pool])
+#     networks = docker_client.networks.list(names=DOCKER_STARCRAFT_NETWORK)
+#     output = networks[0].short_id if networks else None
+#     if not output:
+#         logger.info("network not found, creating ...")
+#         output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
+#     logger.debug(f"docker network id: {output}")
 
 
 def ensure_local_image(
         local_image: str,
         parent_image: str = SC_PARENT_IMAGE,
         java_image: str = SC_JAVA_IMAGE,
-        starcraft_base_dir: str = SCBW_BASE_DIR,
+        starcraft_base_dir: str = SCRE_BASE_DIR,
         starcraft_binary_link: str = SC_BINARY_LINK,
 ) -> None:
     """
@@ -197,21 +197,13 @@ def xoscmounts(host_mount):
 def launch_image(
         # players info
         player: Player,
-        nth_player: int,
-        num_players: int,
 
         # game settings
         headless: bool,
         game_name: str,
-        map_name: str,
-        game_type: GameType,
+        replay_name: str,
         game_speed: int,
-        timeout: Optional[int],
-        hide_names: bool,
-        random_names: bool,
-        drop_players: bool,
         allow_input: bool,
-        auto_launch: bool,
 
         # mount dirs
         game_dir: str,
@@ -232,10 +224,10 @@ def launch_image(
     :raises docker,errors.APIError
     :raises DockerException
     """
-    container_name = f"{game_name}_{nth_player}_{player.name.replace(' ', '_')}"
+    container_name = f"{game_name}_{player.name.replace(' ', '_')}"
 
-    log_dir = f"{game_dir}/{game_name}/logs_{nth_player}"
-    crashes_dir = f"{game_dir}/{game_name}/crashes_{nth_player}"
+    log_dir = f"{game_dir}/{game_name}/logs"
+    crashes_dir = f"{game_dir}/{game_name}/crashes"
     os.makedirs(log_dir, mode=0o777, exist_ok=True)  # todo: proper mode
     os.makedirs(crashes_dir, mode=0o777, exist_ok=True)  # todo: proper mode
 
@@ -249,19 +241,14 @@ def launch_image(
 
     ports = {}
     if not headless:
-        ports.update({"5900/tcp": vnc_base_port + nth_player})
+        ports.update({"5900/tcp": vnc_base_port})
 
     env = dict(
-        PLAYER_NAME=player.name if not random_names else random_string(8),
-        PLAYER_RACE=player.race.value,
-        NTH_PLAYER=nth_player,
-        NUM_PLAYERS=num_players,
+        PLAYER_NAME=player.name,
         GAME_NAME=game_name,
-        MAP_NAME=f"/app/sc/maps/{map_name}",
-        GAME_TYPE=game_type.value,
+        MAP_NAME=('/app/sc/maps/replays/%s' % (replay_name,)),
+
         SPEED_OVERRIDE=game_speed,
-        HIDE_NAMES="1" if hide_names else "0",
-        DROP_PLAYERS="1" if drop_players else "0",
 
         TM_LOG_RESULTS=f"../logs/scores.json",
         TM_LOG_FRAMETIMES=f"../logs/frames.csv",
@@ -270,18 +257,15 @@ def launch_image(
 
         EXIT_CODE_REALTIME_OUTED=EXIT_CODE_REALTIME_OUTED,
         CAPTURE_MOUSE_MOVEMENT="1" if capture_movement else "0",
-        HEADFUL_AUTO_LAUNCH="1" if auto_launch else "0",
 
         JAVA_DEBUG="0"
     )
 
-    if timeout is not None:
-        env["PLAY_TIMEOUT"] = timeout
 
     if isinstance(player, BotPlayer):
         # Only mount write directory, read and AI
         # are copied from the bot directory in proper places in bwapi-data
-        bot_data_write_dir = f"{game_dir}/{game_name}/write_{nth_player}/"
+        bot_data_write_dir = f"{game_dir}/{game_name}/write/"
         os.makedirs(bot_data_write_dir, mode=0o777, exist_ok=True)  # todo: proper mode
         volumes.update({
             xoscmounts(bot_data_write_dir): {"bind": BOT_DATA_WRITE_DIR, "mode": "rw"},
@@ -308,20 +292,14 @@ def launch_image(
                 forward, local = [int(x) for x in player.meta.port.split(':')]
                 ports.update({str(local) + '/tcp': forward})
     else:
-        command = ["/app/play_human.sh"]
-
-    is_server = nth_player == 0
+        pass
 
     entrypoint_opts = ["--headful"]
     if headless:
         entrypoint_opts = [
             "--game", game_name, "--name", player.name,
-            "--race", player.race.value, "--lan"
         ]
-        if is_server:
-            entrypoint_opts += ["--host", "--map", f"/app/sc/maps/{map_name}"]
-        else:
-            entrypoint_opts += ["--join"]
+        entrypoint_opts += ["--host", "--map", f"/app/sc/maps/replays/{replay_name}"]
     command += entrypoint_opts
 
     logger.debug(
@@ -348,6 +326,7 @@ def launch_image(
         network=DOCKER_STARCRAFT_NETWORK,
         ports=ports
     )
+
     if container:
         container_id = running_containers(container_name)
         logger.info(f"launched {player}")
@@ -383,7 +362,7 @@ def container_exit_code(container_id: str) -> Optional[int]:
 
 
 def launch_game(
-        players: List[Player],
+        player: Player,
         launch_params: Dict[str, Any],
         show_all: bool,
         read_overwrite: bool,
@@ -392,7 +371,7 @@ def launch_game(
     """
     :raises DockerException, ContainerException, RealtimeOutedException
     """
-    if not players:
+    if not player:
         raise GameException("at least one player must be specified")
 
     game_dir = launch_params["game_dir"]
@@ -402,21 +381,17 @@ def launch_game(
         logger.info(f"removing existing game results of {game_name}")
         shutil.rmtree(f"{game_dir}/{game_name}")
 
-    for nth_player, player in enumerate(players):
-        launch_image(player, nth_player=nth_player, num_players=len(players), **launch_params)
+    launch_image(player, **launch_params)
 
     logger.debug("checking if game has launched properly...")
     time.sleep(1)
     start_containers = running_containers(game_name + "_")
-    if len(start_containers) != len(players):
-        raise DockerException("some containers exited prematurely, please check logs")
 
     if not launch_params["headless"]:
-        for index, player in enumerate(players if show_all else players[:1]):
-            port = launch_params["vnc_base_port"] + index
-            host = launch_params["vnc_host"]
-            logger.info(f"launching vnc viewer for {player} on address {host}:{port}")
-            launch_vnc_viewer(host, port)
+        port = launch_params["vnc_base_port"]
+        host = launch_params["vnc_host"]
+        logger.info(f"launching vnc viewer for {player} on address {host}:{port}")
+        launch_vnc_viewer(host, port)
 
         logger.info("\n"
                     "In headful mode, you must specify and start the game manually.\n"
@@ -427,14 +402,6 @@ def launch_game(
     running_time = time.time()
     while True:
         containers = running_containers(game_name)
-        if len(containers) == 0:  # game finished
-            break
-        if len(containers) >= 2:  # update the last time when there were multiple containers
-            running_time = time.time()
-        if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
-            raise ContainerException(
-                f"One lingering container has been found after single container "
-                f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
         logger.debug(f"waiting. {containers}")
         wait_callback()
 
@@ -451,10 +418,9 @@ def launch_game(
 
     if read_overwrite:
         logger.info("overwriting bot files")
-        for nth_player, player in enumerate(players):
-            if isinstance(player, BotPlayer):
-                logger.debug(f"overwriting files for {player}")
-                distutils.dir_util.copy_tree(
-                    f"{game_dir}/{game_name}/write_{nth_player}",
-                    player.read_dir
-                )
+        if isinstance(player, BotPlayer):
+            logger.debug(f"overwriting files for {player}")
+            distutils.dir_util.copy_tree(
+                f"{game_dir}/{game_name}/write",
+                player.read_dir
+            )
