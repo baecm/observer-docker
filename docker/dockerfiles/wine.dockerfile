@@ -1,6 +1,6 @@
 # Basic images to build up X server with wine.
 FROM ubuntu:xenial
-LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
+LABEL maintainer="Cheong-mok Bae"
 
 ENV APP_DIR /app
 ENV LOG_DIR $APP_DIR/logs
@@ -50,7 +50,7 @@ RUN set -x \
 # Use the latest version of winetricks
 RUN set -x \
   && apt-get update -y \
-  && apt-get install -y --no-install-recommends \
+  && apt-get install -y --no-install-recommends --allow-unauthenticated\
     xvfb xauth x11vnc x11-utils x11-xserver-utils xdotool \
     curl unzip software-properties-common joe vim sudo wget curl tree screen tmux p7zip apt-transport-https winbind \
     binutils cabextract unrar zenity \
@@ -59,7 +59,7 @@ RUN set -x \
   && apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/ \
   && dpkg --add-architecture i386 \
   && apt-get update -y \
-  && apt-get install -y --no-install-recommends \
+  && apt-get install -y --no-install-recommends --allow-unauthenticated\
       wine-staging-i386=2.20.0~xenial \
       wine-staging-amd64=2.20.0~xenial \
       wine-staging=2.20.0~xenial \

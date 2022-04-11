@@ -9,5 +9,5 @@ if (!(Test-Path starcraft.zip))
     Invoke-WebRequest 'http://files.theabyss.ru/sc/starcraft.zip' -OutFile starcraft.zip
 }
 
-docker build -f game.dockerfile  -t "starcraft:game" .
+docker build -f game.dockerfile  -t "starcraft-cog:game" .
 Pop-Location

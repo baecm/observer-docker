@@ -18,9 +18,9 @@ setup(
                      "to communicate with the game. \n\n"
                      "Please visit https://github.com/Games-and-Simulations/sc-docker "
                      "for more information.",
-    url='https://github.com/Games-and-Simulations/sc-docker',
-    author='Michal Sustr',
-    author_email='michal.sustr@aic.fel.cvut.cz',
+    # url='https://github.com/Games-and-Simulations/sc-docker',
+    # author='Michal Sustr',
+    # author_email='michal.sustr@aic.fel.cvut.cz',
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
@@ -49,7 +49,7 @@ setup(
                       'pandas',
                       'matplotlib',
                       'docker'],
-    packages=['scbw'],
+    # packages=['scbw'],
     entry_points={  # Optional
         'console_scripts': [
             'scbw.play=scbw.cli:main',

@@ -1,5 +1,5 @@
-FROM starcraft:java
-LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
+FROM starcraft-cog:java
+LABEL maintainer="Cheong-mok Bae"
 
 #####################################################################
 USER starcraft

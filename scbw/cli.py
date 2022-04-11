@@ -136,7 +136,7 @@ parser.add_argument('-v', "--version", action='store_true', dest='show_version',
 
 def _image_version_up_to_date():
     client = docker.from_env()
-    return any(tag == SC_IMAGE for image in client.images.list('starcraft') for tag in image.tags)
+    return any(tag == SC_IMAGE for image in client.images.list('starcraft-cog') for tag in image.tags)
 
 
 # todo: add support for multi-PC play.

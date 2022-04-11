@@ -1,5 +1,5 @@
-FROM starcraft:wine
-LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
+FROM starcraft-cog:wine
+LABEL maintainer="Cheong-mok Bae"
 
 ENV SC_DIR="$APP_DIR/sc"
 ENV BWTA_DIR="$APP_DIR/bwta"
