@@ -1,5 +1,5 @@
-FROM starcraft-cog:bwapi
-LABEL maintainer="Cheong-mok Bae"
+FROM starcraft:bwapi
+LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
 
 USER starcraft
 WORKDIR $APP_DIR

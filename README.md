@@ -53,9 +53,9 @@ Create game on the server (VNC viewer on port 5900) and wait for bots to join th
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 
-You can put the RealVNC client to fullscbwen and play comfortably.
+You can put the RealVNC client to fullscreen and play comfortably.
 
-(Although you might want to change your scbwen resolution to 800x600)
+(Although you might want to change your screen resolution to 800x600)
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
@@ -67,12 +67,12 @@ See [more usage examples](USAGE.md).
 ## Known limitations
 
 - Headful mode needs to specify the map manually due to "Unable to distribute map" bug.
-- Works only for BWAPI 4.1.2, 4.2.0 (because I don't have TM compiled for those versions)
+- Works only for BWAPI 3.7.4, 3.7.5, 4.1.2, 4.2.0 and 4.4.0
 
 ## Specification
 
 - StarCraft 1.16.1 game from ICCUP (no need for special installs!)
-- BWAPI 4.1.2, 4.2.0
+- BWAPI 3.7.4, 3.7.5, 4.1.2, 4.2.0
 - BWTA 2.2
 - SSCAI maps pack with BWTA/BWTA2 caches
 - 32bit oracle Java 8 `1.8.0_152-b16`

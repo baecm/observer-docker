@@ -2,7 +2,7 @@ import json
 import logging
 from typing import List, Optional
 
-from scbw.logs import find_frames, find_logs, find_replays, find_scores
+from scbw.logs import find_frames, find_unit_events, find_logs, find_replays, find_scores
 from scbw.player import Player
 
 logger = logging.getLogger(__name__)
@@ -13,6 +13,7 @@ class ScoreResult:
             self,
             is_winner: bool,
             is_crashed: bool,
+            timed_out: bool,
             building_score: int,
             kill_score: int,
             razing_score: int,
@@ -20,6 +21,7 @@ class ScoreResult:
     ) -> None:
         self.is_winner = is_winner
         self.is_crashed = is_crashed
+        self.timed_out = timed_out
         self.building_score = building_score
         self.kill_score = kill_score
         self.razing_score = razing_score
@@ -33,6 +35,7 @@ class ScoreResult:
         return ScoreResult(
             v['is_winner'],
             v['is_crashed'],
+            v['timed_out'],
             v['building_score'],
             v['kill_score'],
             v['razing_score'],
@@ -44,7 +47,7 @@ class GameResult:
     def __init__(
             self,
             game_name: str,
-            player: Player,
+            players: List[Player],
             game_time: float,
             is_realtime_outed: bool,
             map_dir: str,
@@ -52,7 +55,7 @@ class GameResult:
     ) -> None:
         self.game_name = game_name
         self.game_time = game_time
-        self.player = player
+        self.players = players
 
         self.map_dir = map_dir
         self.game_dir = game_dir
@@ -69,6 +72,7 @@ class GameResult:
         self._log_files = None
         self._replay_files = None
         self._frame_files = None
+        self._unit_event_files = None
         self._score_files = None
 
         self.score_results = []
@@ -79,16 +83,31 @@ class GameResult:
         # this whole processing assumes 1v1 bot vs bot games
         if self._is_processed:
             return
+
         self._is_processed = True
 
         if self.is_realtime_outed:
             return
 
+        num_players = len(self.players)
+
+        if len(self.score_files) != num_players:
+            logger.warning(f"Not all score files have been recorded for game '{self.game_name}'")
+            logger.warning(f"Expected {num_players} score files, got {len(self.score_files)}")
+            logger.warning("Assuming a crash happened.")
+            self._is_crashed = True
+            return
+
         scores = {score_file: ScoreResult.load_score(score_file)
-                  for score_file in sorted(self.score_files)}
+                   for score_file in sorted(self.score_files)}
         if any(score.is_crashed for score in scores.values()):
             logger.warning(f"Some of the players crashed in game '{self.game_name}'")
             self._is_crashed = True
+            return
+
+        if any(score.timed_out for score in scores.values()):
+            logger.warning(f"Some of the players timed out in game '{self.game_name}'")
+            self._is_gametime_outed = True
             return
 
         if not any(score.is_winner for score in scores.values()):
@@ -104,13 +123,13 @@ class GameResult:
             self._is_crashed = True
             return
 
-        # winner_score_file = [file for file, score in scores.items() if score.is_winner][0]
-        # nth_player = int(winner_score_file.replace("/scores.json", "").replace("\\scores.json", "").split("_")[-1])
+        winner_score_file = [file for file, score in scores.items() if score.is_winner][0]
+        nth_player = int(winner_score_file.replace("/scores.json", "").replace("\\scores.json", "").split("_")[-1])
 
-        # self._nth_winner_player = nth_player
-        # self._nth_loser_player = 1 - nth_player
-        # self._winner_player = self.players[self._nth_winner_player]
-        # self._loser_player = self.players[self._nth_loser_player]
+        self._nth_winner_player = nth_player
+        self._nth_loser_player = 1 - nth_player
+        self._winner_player = self.players[self._nth_winner_player]
+        self._loser_player = self.players[self._nth_loser_player]
         self._is_crashed = False
         # todo: implement, maybe according to SSCAIT rules?
         self._is_gametime_outed = False
@@ -133,6 +152,13 @@ class GameResult:
         if self._frame_files is None:
             self._frame_files = find_frames(self.game_dir, self.game_name)
         return self._frame_files
+
+    @property
+    def unit_event_files(self) -> List[str]:
+        if self._unit_event_files is None:
+            self._unit_event_files = find_unit_events(self.game_dir, self.game_name)
+        return self._unit_event_files
+
 
     @property
     def score_files(self) -> List[str]:

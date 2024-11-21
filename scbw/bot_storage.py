@@ -11,19 +11,26 @@ import requests
 from scbw.player import BotPlayer, BotJsonMeta
 from scbw.utils import levenshtein_dist, download_extract_zip, download_file
 
+
+
 logger = logging.getLogger(__name__)
 
 
+
 class BotStorage:
+
 
     def find_bot(self, name: str) -> Optional[BotPlayer]:
         raise NotImplemented
 
 
+
 class LocalBotStorage(BotStorage):
+
 
     def __init__(self, bot_dir: str) -> None:
         self.bot_dir = bot_dir
+
 
     def find_bot(self, name: str) -> Optional[BotPlayer]:
         f_name = f"{self.bot_dir}/{name}"
@@ -37,11 +44,16 @@ class LocalBotStorage(BotStorage):
         return bot
 
 
+
 class SscaitBotStorage(BotStorage):
+
+
     MAX_MATCHING_SUGGESTIONS = 5
+
 
     def __init__(self, bot_dir: str) -> None:
         self.bot_dir = bot_dir
+
 
     def find_bot(self, name: str) -> Optional[BotPlayer]:
         try:
@@ -66,6 +78,7 @@ class SscaitBotStorage(BotStorage):
             logger.warning(f"Could not find the bot '{name}' on SSCAIT server")
             return None
 
+
     def find_matching_name(self, name: str, bot_names: np.ndarray) -> str:
         if name in bot_names:
             return name
@@ -82,12 +95,14 @@ class SscaitBotStorage(BotStorage):
                 logger.info(f"{i}: {closest_bot}")
 
             logger.info(
-                f"Which would you like to use? (enter number 0-{self.MAX_MATCHING_SUGGESTIONS - 1})")
+                f"Which would you like to use? (enter number 0-{self.MAX_MATCHING_SUGGESTIONS-1})")
             bot_idx = max(min(self.MAX_MATCHING_SUGGESTIONS - 1, int(input())), 0)
             return closest_matching[bot_idx]
 
+
     def get_bot_specs(self) -> Dict:
         return requests.get("http://sscaitournament.com/api/bots.php").json()
+
 
     def try_download(self, json_spec: Dict) -> Optional[BotJsonMeta]:
         bot_spec = BotPlayer.parse_meta(json_spec)

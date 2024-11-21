@@ -1,16 +1,23 @@
-FROM starcraft-cog:play
-LABEL maintainer="Cheong-mok Bae"
+FROM starcraft:play
+LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
+
 
 ENV JAVA_DIR="$APP_DIR/java"
+ENV TM_DIR="$APP_DIR/tm"
 
 #####################################################################
 USER starcraft
 WORKDIR $APP_DIR
 
-COPY --chown=starcraft:users jre-8u321-windows-i586.tar.gz jre.tar.gz
 RUN set -x \
-    && tar -xzf jre.tar.gz \
-    && mv jre1.8.0_321/ $JAVA_DIR/ \
-    && rm jre.tar.gz
+    && wget https://corretto.aws/downloads/latest/amazon-corretto-8-x86-windows-jre.zip -O jre.zip \
+    && unzip jre.zip\
+    && mv jre*/ $JAVA_DIR/ \
+    && rm jre.zip
 
 COPY scripts/win_java32 /usr/bin/win_java32
+
+
+ENV TM_DIR="$APP_DIR/tm"
+
+COPY --chown=starcraft:users ../tm $TM_DIR

@@ -29,9 +29,9 @@ Simply add `--headless` option.
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 
-You can put the RealVNC client to fullscbwen and play comfortably.
+You can put the RealVNC client to fullscreen and play comfortably.
 
-(Although you might want to change your scbwen resolution to 800x600)
+(Although you might want to change your screen resolution to 800x600)
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
@@ -110,6 +110,10 @@ Use this structure:
       4.0.1b  84f413409387ae80a4b4acc51fed3923
       3.7.5   5e590ea55c2d3c66a36bf75537f8655a
       3.7.4   6e940dc6acc76b6e459b39a9cdd466ae
+
+- **/supplementalAI/** - additional files that will be copied to *AI*.
+
+-- **/supplementalRead/** - additional files that will be coped to *read*, ie. configuration files.
 
 Now you should be able to play game:
 
