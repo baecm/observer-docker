@@ -183,10 +183,6 @@ function prepare_character() {
     fi
 }
 
-function prepare_tm() {
-    cp ${TM_DIR}/${BOT_BWAPI}.dll $SC_DIR/tm.dll
-}
-
 function check_bot_requirements() {
     # Make sure the bot file exists
     if [ ! -f "$BOT_DIR/AI/$BOT_FILE" ]; then

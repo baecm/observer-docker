@@ -39,8 +39,6 @@ BOT_DIR = f"{APP_DIR}/bot"
 MAP_DIR = f"{SC_DIR}/maps"
 ERRORS_DIR = f"{SC_DIR}/Errors"
 BWAPI_DATA_DIR = f"{SC_DIR}/bwapi-data"
-BWAPI_DATA_BWTA_DIR = f"{BWAPI_DATA_DIR}/BWTA"
-BWAPI_DATA_BWTA2_DIR = f"{BWAPI_DATA_DIR}/BWTA2"
 BOT_DATA_SAVE_DIR = f"{BWAPI_DATA_DIR}/save"
 BOT_DATA_READ_DIR = f"{BWAPI_DATA_DIR}/read"
 BOT_DATA_WRITE_DIR = f"{BWAPI_DATA_DIR}/write"
@@ -48,7 +46,7 @@ BOT_DATA_AI_DIR = f"{BWAPI_DATA_DIR}/AI"
 BOT_DATA_LOGS_DIR = f"{BWAPI_DATA_DIR}/logs"
 
 EXIT_CODE_REALTIME_OUTED = 2
-MAX_TIME_RUNNING_SINGLE_CONTAINER = 70
+MAX_TIME_RUNNING_SINGLE_CONTAINER = 3600
 
 try:
     from subprocess import DEVNULL  # py3k
@@ -175,8 +173,6 @@ def launch_image(
         game_dir: str,
         bot_dir: str,
         map_dir: str,
-        # bwapi_data_bwta_dir: str,
-        # bwapi_data_bwta2_dir: str,
 
         vnc_base_port: int,
         vnc_host: int,
@@ -202,8 +198,6 @@ def launch_image(
         xoscmounts(log_dir): {"bind": LOG_DIR, "mode": "rw"},
         xoscmounts(map_dir): {"bind": MAP_DIR, "mode": "rw"},
         xoscmounts(crashes_dir): {"bind": ERRORS_DIR, "mode": "rw"},
-        # xoscmounts(bwapi_data_bwta_dir): {"bind": BWAPI_DATA_BWTA_DIR, "mode": "rw"},
-        # xoscmounts(bwapi_data_bwta2_dir): {"bind": BWAPI_DATA_BWTA2_DIR, "mode": "rw"},
     }
 
     ports = {}

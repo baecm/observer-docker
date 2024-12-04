@@ -40,8 +40,6 @@ class GameArgs(Namespace):
     bot_dir: str
     game_dir: str
     map_dir: str
-    # bwapi_data_bwta_dir: str
-    # bwapi_data_bwta2_dir: str
     vnc_base_port: int
     vnc_host: str
     capture_movement: bool
@@ -131,8 +129,6 @@ def run_game(
         game_dir=args.game_dir,
         bot_dir=args.bot_dir,
         map_dir=args.map_dir,
-        # bwapi_data_bwta_dir=args.bwapi_data_bwta_dir,
-        # bwapi_data_bwta2_dir=args.bwapi_data_bwta2_dir,
 
         # vnc
         vnc_base_port=args.vnc_base_port,

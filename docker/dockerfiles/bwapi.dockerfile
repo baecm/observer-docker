@@ -4,7 +4,6 @@ LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
 ENV SC_DIR="$APP_DIR/sc"
 ENV BWTA_DIR="$APP_DIR/bwta"
 ENV BWAPI_DIR="$APP_DIR/bwapi"
-ENV TM_DIR="$APP_DIR/tm"
 ENV BOT_DIR="$APP_DIR/bot"
 ENV MAP_DIR="$SC_DIR/maps"
 ENV ERRORS_DIR="$SC_DIR/Errors"
@@ -14,8 +13,6 @@ ENV BOT_DATA_AI_DIR="$BWAPI_DATA_DIR/AI"
 ENV BOT_DATA_READ_DIR="$BWAPI_DATA_DIR/read"
 
 # Entire BWAPI data dir is not shared with host, only these subdirs:
-ENV BWAPI_DATA_BWTA_DIR="$BWAPI_DATA_DIR/BWTA"
-ENV BWAPI_DATA_BWTA2_DIR="$BWAPI_DATA_DIR/BWTA2"
 ENV BOT_DATA_WRITE_DIR="$BWAPI_DATA_DIR/write"
 
 ARG BOT_UID=1001
@@ -62,11 +59,6 @@ COPY --chown=starcraft:users bwheadless.exe $SC_DIR
 
 # Copy relevant BWAPI versions (cached)
 COPY --chown=starcraft:users bwapi $BWAPI_DIR
-COPY --chown=starcraft:users tm $TM_DIR
-RUN echo "##################################################"
-RUN echo "Contents of $TM_DIR:" && ls -lR $TM_DIR
-RUN echo "##################################################"
-
 
 COPY scripts/launch_game /usr/bin/launch_game
 

@@ -33,7 +33,6 @@ else
     prepare_bwapi "NULL"
 fi
 
-prepare_tm
 prepare_character
 
 if [ "$IS_HEADFUL" == "1" ]; then

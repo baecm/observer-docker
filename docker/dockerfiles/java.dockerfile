@@ -1,9 +1,6 @@
 FROM starcraft:play
-LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
-
 
 ENV JAVA_DIR="$APP_DIR/java"
-ENV TM_DIR="$APP_DIR/tm"
 
 #####################################################################
 USER starcraft
@@ -16,8 +13,3 @@ RUN set -x \
     && rm jre.zip
 
 COPY scripts/win_java32 /usr/bin/win_java32
-
-
-ENV TM_DIR="$APP_DIR/tm"
-
-COPY --chown=starcraft:users ../tm $TM_DIR

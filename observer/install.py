@@ -3,8 +3,7 @@ import os
 import os.path
 
 from observer.defaults import (
-    OBSERVER_BASE_DIR, SC_IMAGE, SC_GAME_DIR, SC_BOT_DIR, SC_MAP_DIR,
-    SC_BWAPI_DATA_BWTA_DIR, SC_BWAPI_DATA_BWTA2_DIR
+    OBSERVER_BASE_DIR, SC_IMAGE, SC_GAME_DIR, SC_BOT_DIR, SC_MAP_DIR
 )
 from observer.docker_utils import (
     ensure_docker_can_run, ensure_local_net,
@@ -29,15 +28,10 @@ def install() -> None:
 
     create_data_dirs(
         SC_GAME_DIR,
-        SC_BWAPI_DATA_BWTA_DIR,
-        SC_BWAPI_DATA_BWTA2_DIR,
         SC_BOT_DIR,
         SC_MAP_DIR,
     )
 
-    # download_sscait_maps(SC_MAP_DIR)
-    # download_season_maps(SC_MAP_DIR)
-    # download_bwta_caches(SC_BWAPI_DATA_BWTA_DIR, SC_BWAPI_DATA_BWTA2_DIR)
     os.makedirs(f"{SC_MAP_DIR}/replays", exist_ok=True)
     os.makedirs(f"{SC_MAP_DIR}/BroodWar", exist_ok=True)
 

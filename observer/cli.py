@@ -6,8 +6,7 @@ import sys
 import coloredlogs
 import docker
 from observer.defaults import (
-    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE,
-    SC_BWAPI_DATA_BWTA_DIR, SC_BWAPI_DATA_BWTA2_DIR, VERSION
+    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
 )
 from observer.docker_utils import BASE_VNC_PORT, VNC_HOST
 from observer.error import ScbwException
@@ -88,14 +87,6 @@ parser.add_argument('--game_dir', type=str, default=SC_GAME_DIR,
                     help=f"Directory where game logs and results are stored, default:\n{SC_GAME_DIR}")
 parser.add_argument('--map_dir', type=str, default=SC_MAP_DIR,
                     help=f"Directory where maps are stored, default:\n{SC_MAP_DIR}")
-
-#  BWAPI data volumes
-parser.add_argument('--bwapi_data_bwta_dir', type=str, default=SC_BWAPI_DATA_BWTA_DIR,
-                    help=f"Directory where BWTA map caches are stored, "
-                         f"default:\n{SC_BWAPI_DATA_BWTA_DIR}")
-parser.add_argument('--bwapi_data_bwta2_dir', type=str, default=SC_BWAPI_DATA_BWTA2_DIR,
-                    help=f"Directory where BWTA2 map caches are stored, "
-                         f"default:\n{SC_BWAPI_DATA_BWTA2_DIR}")
 
 # VNC
 parser.add_argument('--vnc_base_port', type=int, default=BASE_VNC_PORT,
