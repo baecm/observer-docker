@@ -68,10 +68,6 @@ function prepare_bwapi() {
         sed -i "s:^game = :game = ${GAME_NAME}:g" "${BWAPI_INI}"
     fi
 
-    if [ $DROP_PLAYERS -eq "1" ]; then
-        sed -i "s:^drop_players = ON:drop_players = OFF:g" "${BWAPI_INI}"
-    fi
-
     . hook_update_bwapi_ini.sh
 
     cat "$BWAPI_INI"
@@ -177,10 +173,8 @@ function start_game() {
 }
 
 function prepare_character() {
-    if [ "$HIDE_NAMES" == "0" ]; then
-        mv "$SC_DIR/characters/player.spc" "$SC_DIR/characters/${PLAYER_NAME}.spc"
-        mv "$SC_DIR/characters/player.mpc" "$SC_DIR/characters/${PLAYER_NAME}.mpc"
-    fi
+    mv "$SC_DIR/characters/player.spc" "$SC_DIR/characters/${PLAYER_NAME}.spc"
+    mv "$SC_DIR/characters/player.mpc" "$SC_DIR/characters/${PLAYER_NAME}.mpc"
 }
 
 function check_bot_requirements() {

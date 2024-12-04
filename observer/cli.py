@@ -25,6 +25,7 @@ parser.add_argument('--install', action='store_true',
                     help="Download all dependencies and data files.\n"
                          "Needed to run the first time after `pip install`.")
 parser.add_argument('--extract', action='store_true')
+parser.add_argument('--record', action='store_true')
 parser.add_argument('--bots', nargs="+", type=bot_regex,
                     metavar="BOT_NAME[:RACE]",
                     help='Specify the names of the bots that should play.\n'
@@ -37,14 +38,6 @@ parser.add_argument('--bots', nargs="+", type=bot_regex,
                          '  --bots Tyr:P PurpleWave:P\n'
                          '  --bots Tyr PurpleWave '
                     )
-parser.add_argument('--human', action='store_true',
-                    help="Allow play as human against bot.\n")
-
-# todo: support builtin AI
-# parser.add_argument('--builtin_ai', type=int, default=0,
-#                     help="Add builtin (default) AI to play against.\n"
-#                          "Specify how many AIs will play the game. (default 0)")
-
 parser.add_argument('--map', type=str, metavar="MAP.scx", default="sscai/(2)Benzene.scx",
                     help="Name of map on which SC should be played,\n"
                          "relative to --map_dir")
@@ -71,11 +64,6 @@ parser.add_argument("--timeout", type=int, default=None,
 parser.add_argument("--timeout_at_frame", type=int, default=None,
                     help="End game after the given frame count.\n"
                          "If not set, run without frame limit.")
-parser.add_argument("--hide_names", action="store_true",
-                    help="Hide player names, each player will be called only 'player'.\n"
-                         "By default, show player names (as their bot name)")
-parser.add_argument("--random_names", action="store_true",
-                    help="Randomize player names.")
 parser.add_argument("--auto_launch", action="store_true",
                     help="In headful mode, automatically launch multiplayer.\n"
                          "Experimental. (automatically sends keys to the starcraft window).")
@@ -170,14 +158,15 @@ def main():
                      f'Did you run "observer --install"?')
         # parser.error exits
 
-    # bots are always required, but not if showing version :)
-    if not args.bots and not args.human and not args.extract:
-        # parser.error('the following arguments are required: --bots or --human')
-        parser.error('the following arguments are required: --bots or --human or --extract')
+    if not args.extract and not args.record:
+        parser.error('the following arguments are required: --extract or --record')
         # parser.error exits
 
     if args.extract:
         args.bots = ['Extractor']
+    
+    if args.record:
+        args.bots = ['Recorder']
 
     if os.path.exists(f"{args.game_dir}/GAME_{args.game_name}"):
         logger.info(f'Game {args.game_name} has already been played, '

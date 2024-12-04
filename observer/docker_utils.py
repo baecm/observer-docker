@@ -163,9 +163,6 @@ def launch_image(
         seed_override: str,
         timeout: Optional[int],
         timeout_at_frame: Optional[int],
-        hide_names: bool,
-        random_names: bool,
-        drop_players: bool,
         allow_input: bool,
         auto_launch: bool,
 
@@ -205,7 +202,7 @@ def launch_image(
         ports.update({"5900/tcp": vnc_base_port + nth_player})
 
     env = dict(
-        PLAYER_NAME=player.name if not random_names else random_string(8),
+        PLAYER_NAME=player.name,
         PLAYER_RACE=player.race.value,
         NTH_PLAYER=nth_player,
         NUM_PLAYERS=num_players,
@@ -214,9 +211,6 @@ def launch_image(
         GAME_TYPE=game_type.value,
         SPEED_OVERRIDE=game_speed,
         SEED_OVERRIDE=seed_override,
-        HIDE_NAMES="1" if hide_names else "0",
-        DROP_PLAYERS="1" if drop_players else "0",
-
         TM_LOG_RESULTS=f"../logs/scores.json",
         TM_LOG_FRAMETIMES=f"../logs/frames.csv",
         TM_LOG_UNIT_EVENTS=f"../logs/unit_events.csv",

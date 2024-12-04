@@ -33,8 +33,6 @@ class GameArgs(Namespace):
     game_type: str
     game_speed: int
     seed_override: int
-    hide_names: bool
-    random_names: bool
     timeout: int
     timeout_at_frame: int
     bot_dir: str
@@ -60,8 +58,7 @@ def run_game(
     # Check all startup requirements
     if not args.headless:
         check_vnc_exists()
-    if args.human and args.headless:
-        raise GameException("Cannot use human play in headless mode")
+    
     if args.headless and args.show_all:
         raise GameException("Cannot show all screens in headless mode")
 
@@ -71,8 +68,7 @@ def run_game(
 
     # Prepare players
     players = []
-    if args.human:
-        players.append(HumanPlayer())
+    
     if args.bots is None:
         args.bots = []
 
@@ -117,13 +113,8 @@ def run_game(
         seed_override=seed_override,
         timeout=args.timeout,
         timeout_at_frame=args.timeout_at_frame,
-        hide_names=args.hide_names,
-        drop_players=any(isinstance(player, BotPlayer)
-                         and player.meta.javaDebugPort is not None
-                         for player in players),
         allow_input=args.allow_input,
         auto_launch=args.auto_launch,
-        random_names=args.random_names,
 
         # mount dirs
         game_dir=args.game_dir,
