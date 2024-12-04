@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('--install', action='store_true',
                     help="Download all dependencies and data files.\n"
                          "Needed to run the first time after `pip install`.")
-
+parser.add_argument('--extract', action='store_true')
 parser.add_argument('--bots', nargs="+", type=bot_regex,
                     metavar="BOT_NAME[:RACE]",
                     help='Specify the names of the bots that should play.\n'
@@ -176,13 +176,17 @@ def main():
 
     if not os.path.exists(OBSERVER_BASE_DIR):
         parser.error(f'The data directory {OBSERVER_BASE_DIR} was not found. '
-                     f'Did you run "observer.play --install"?')
+                     f'Did you run "observer --install"?')
         # parser.error exits
 
     # bots are always required, but not if showing version :)
-    if not args.bots and not args.human:
-        parser.error('the following arguments are required: --bots or --human')
+    if not args.bots and not args.human and not args.extract:
+        # parser.error('the following arguments are required: --bots or --human')
+        parser.error('the following arguments are required: --bots or --human or --extract')
         # parser.error exits
+
+    if args.extract:
+        args.bots = ['Extractor']
 
     if os.path.exists(f"{args.game_dir}/GAME_{args.game_name}"):
         logger.info(f'Game {args.game_name} has already been played, '

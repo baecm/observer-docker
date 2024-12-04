@@ -10,7 +10,7 @@ def get_data_dir() -> str:
         return os.path.expanduser("~") + "/.observer"
 
 
-VERSION = "1.0.4-BK"
+VERSION = "1.0.0"
 
 OBSERVER_BASE_DIR = get_data_dir()
 SC_GAME_DIR = f"{OBSERVER_BASE_DIR}/games"
@@ -19,5 +19,5 @@ SC_BWAPI_DATA_BWTA2_DIR = f"{OBSERVER_BASE_DIR}/bwapi-data/BWTA2"
 SC_BOT_DIR = f"{OBSERVER_BASE_DIR}/bots"
 SC_MAP_DIR = f"{OBSERVER_BASE_DIR}/maps"
 
-SC_IMAGE = "starcraft:game"
-SC_JAVA_IMAGE = "starcraft:java"
+SC_IMAGE = "observer:game"
+SC_JAVA_IMAGE = "observer:java"
