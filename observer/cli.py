@@ -26,18 +26,6 @@ parser.add_argument('--install', action='store_true',
                          "Needed to run the first time after `pip install`.")
 parser.add_argument('--extract', action='store_true')
 parser.add_argument('--record', action='store_true')
-parser.add_argument('--bots', nargs="+", type=bot_regex,
-                    metavar="BOT_NAME[:RACE]",
-                    help='Specify the names of the bots that should play.\n'
-                         f'Optional RACE can be one of {[race.value for race in PlayerRace]} \n'
-                         'If RACE isn\'t specified it will be loaded from cache if possible.\n'
-                         'The bots are looked up in the --bot_dir directory.\n'
-                         'If some does not exist, launcher \n'
-                         'will try to download it from SSCAIT server.\n'
-                         'Examples: \n'
-                         '  --bots Tyr:P PurpleWave:P\n'
-                         '  --bots Tyr PurpleWave '
-                    )
 parser.add_argument('--map', type=str, metavar="MAP.scx", default="sscai/(2)Benzene.scx",
                     help="Name of map on which SC should be played,\n"
                          "relative to --map_dir")
