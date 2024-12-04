@@ -167,6 +167,7 @@ def main():
     
     if args.record:
         args.bots = ['Recorder']
+        args.game_speed = -1
 
     if os.path.exists(f"{args.game_dir}/GAME_{args.game_name}"):
         logger.info(f'Game {args.game_name} has already been played, '
