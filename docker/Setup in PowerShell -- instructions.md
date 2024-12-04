@@ -18,7 +18,7 @@ Using Notepad++ proved to be working for the purposes here.
 For some explanations, please see: https://github.com/moby/moby/issues/20397
 
 Optional steps:
-* Do `pip uninstall scbw` if you have installed `scbw` previously to avoid potential conflicts.
+* Do `pip uninstall observer` if you have installed `observer` previously to avoid potential conflicts.
 * Do "Reset to factory defaults..." in docker if there are sc-docker-related images previously installed (e.g., the StarCraft game image). Proceed with caution if you have other images which are not related to sc-docker.
 
 Steps:
@@ -42,11 +42,11 @@ https://www.oracle.com/technetwork/es/java/javase/downloads/jre8-downloads-21331
 
     2.2) Mac users: skip this step.
     ```
-    Push-Location ../scbw/local_docker
+    Push-Location ../observer/local_docker
     ```
 
     2.3) Mac users: skip this step. Instead, download the file `starcraft.zip` from
-    http://files.theabyss.ru/sc/starcraft.zip and move it to `sc-docker\scbw\local-docker`.
+    http://files.theabyss.ru/sc/starcraft.zip and move it to `sc-docker\observer\local-docker`.
     ```
     if (!(Test-Path starcraft.zip))
     {
@@ -54,7 +54,7 @@ https://www.oracle.com/technetwork/es/java/javase/downloads/jre8-downloads-21331
     }
     ```
 
-    2.4) Mac users: please cd to `sc-docker\scbw\local-docker` first.
+    2.4) Mac users: please cd to `sc-docker\observer\local-docker` first.
     ```
     docker build -f game.dockerfile  -t "starcraft:game" .
     ```
@@ -66,7 +66,7 @@ https://www.oracle.com/technetwork/es/java/javase/downloads/jre8-downloads-21331
 
 3. Do `pip install wheel`
 4. Navigate one level up to `sc-docker`, Do `py setup.py bdist_wheel` or `python3 setup.py bdist_wheel` depending on how your Python is setup. For Mac users: use the latter (`python3...`).
-5. Do `pip3 install dist/scbw-1.0.4_BK-py3-none-any.whl`
+5. Do `pip3 install dist/observer-1.0.4_BK-py3-none-any.whl`
 6. An example command to run a game may look like this:
-`scbw.play --bots "Hao Pan" "Martin Rooijackers" --headless --timeout 630 --read_overwrite --game_speed 0 --map "sscai/(4)Fighting Spirit.scx"`
-7. For Windows users: do `scbw.play --install` if you see `docker.errors.NotFound: 404 Client Error: Not Found ("network sc_net not found")` after launching a game.
+`observer.play --bots "Hao Pan" "Martin Rooijackers" --headless --timeout 630 --read_overwrite --game_speed 0 --map "sscai/(4)Fighting Spirit.scx"`
+7. For Windows users: do `observer.play --install` if you see `docker.errors.NotFound: 404 Client Error: Not Found ("network sc_net not found")` after launching a game.

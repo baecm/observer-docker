@@ -10,9 +10,9 @@ import re
 
 from dateutil.parser import parse as parse_iso_date
 
-from scbw.bwapi import supported_versions, versions_md5s
-from scbw.error import PlayerException
-from scbw.utils import md5_file
+from observer.bwapi import supported_versions, versions_md5s
+from observer.error import PlayerException
+from observer.utils import md5_file
 
 
 

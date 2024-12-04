@@ -6,7 +6,7 @@
 
 Please run the command issued with  `--log_level=DEBUG --log_verbose` parameters and log:
 
-    scbw.play --bots krasi0 CherryPi --headless --log_level=DEBUG --log_verbose
+    observer.play --bots krasi0 CherryPi --headless --log_level=DEBUG --log_verbose
     INFO checking docker version
     DEBUG Using docker API version b"'1.32'\n"
     INFO checking docker can run
@@ -14,13 +14,13 @@ Please run the command issued with  `--log_level=DEBUG --log_verbose` parameters
     DEBUG docker network id: b'0efb6d60a90a\n'
     INFO checking if there is local image starcraft:game
     DEBUG docker image id: b'26cc1b5de9df\n'
-    DEBUG checking bot in /home/michal/.scbw/bots/krasi0
-    DEBUG found bot in /home/michal/.scbw/bots/krasi0
-    DEBUG checking bot in /home/michal/.scbw/bots/CherryPi
-    DEBUG found bot in /home/michal/.scbw/bots/CherryPi
-    DEBUG ['docker', 'run', '-d', '--rm', '--privileged', '--name', 'GAME_BED138A5_0_krasi0', '--volume', '/home/michal/.scbw/logs:/app/logs:rw', '--volume', '/home/michal/.scbw/bots:/app/bots:ro', '--volume', '/home/michal/.scbw/maps:/app/sc/maps:rw', '--volume', '/home/michal/.scbw/bwapi-data/BWTA:/app/sc/bwapi-data/BWTA:rw', '--volume', '/home/michal/.scbw/bwapi-data/BWTA2:/app/sc/bwapi-data/BWTA2:rw', '--net', 'sc_net', '--volume', '/home/michal/.scbw/bots/krasi0/write/GAME_BED138A5_0:/app/sc/bwapi-data/write:rw', '-e', 'PLAYER_NAME=krasi0', '-e', 'PLAYER_RACE=T', '-e', 'NTH_PLAYER=0', '-e', 'NUM_PLAYERS=2', '-e', 'GAME_NAME=GAME_BED138A5', '-e', 'MAP_NAME=/app/sc/maps/sscai/(2)Benzene.scx', '-e', 'GAME_TYPE=FREE_FOR_ALL', '-e', 'SPEED_OVERRIDE=0', '-e', 'BOT_NAME=krasi0', '-e', 'BOT_FILE=krasi0AIClient.exe', 'starcraft:game', '/app/play_bot.sh', '--game', 'GAME_BED138A5', '--name', 'krasi0', '--race', 'T', '--lan', '--host', '--map', '/app/sc/maps/sscai/(2)Benzene.scx']
+    DEBUG checking bot in /home/michal/.observer/bots/krasi0
+    DEBUG found bot in /home/michal/.observer/bots/krasi0
+    DEBUG checking bot in /home/michal/.observer/bots/CherryPi
+    DEBUG found bot in /home/michal/.observer/bots/CherryPi
+    DEBUG ['docker', 'run', '-d', '--rm', '--privileged', '--name', 'GAME_BED138A5_0_krasi0', '--volume', '/home/michal/.observer/logs:/app/logs:rw', '--volume', '/home/michal/.observer/bots:/app/bots:ro', '--volume', '/home/michal/.observer/maps:/app/sc/maps:rw', '--volume', '/home/michal/.observer/bwapi-data/BWTA:/app/sc/bwapi-data/BWTA:rw', '--volume', '/home/michal/.observer/bwapi-data/BWTA2:/app/sc/bwapi-data/BWTA2:rw', '--net', 'sc_net', '--volume', '/home/michal/.observer/bots/krasi0/write/GAME_BED138A5_0:/app/sc/bwapi-data/write:rw', '-e', 'PLAYER_NAME=krasi0', '-e', 'PLAYER_RACE=T', '-e', 'NTH_PLAYER=0', '-e', 'NUM_PLAYERS=2', '-e', 'GAME_NAME=GAME_BED138A5', '-e', 'MAP_NAME=/app/sc/maps/sscai/(2)Benzene.scx', '-e', 'GAME_TYPE=FREE_FOR_ALL', '-e', 'SPEED_OVERRIDE=0', '-e', 'BOT_NAME=krasi0', '-e', 'BOT_FILE=krasi0AIClient.exe', 'starcraft:game', '/app/play_bot.sh', '--game', 'GAME_BED138A5', '--name', 'krasi0', '--race', 'T', '--lan', '--host', '--map', '/app/sc/maps/sscai/(2)Benzene.scx']
     INFO launched BotPlayer:krasi0:T in container GAME_BED138A5_0_krasi0
-    DEBUG ['docker', 'run', '-d', '--rm', '--privileged', '--name', 'GAME_BED138A5_1_CherryPi', '--volume', '/home/michal/.scbw/logs:/app/logs:rw', '--volume', '/home/michal/.scbw/bots:/app/bots:ro', '--volume', '/home/michal/.scbw/maps:/app/sc/maps:rw', '--volume', '/home/michal/.scbw/bwapi-data/BWTA:/app/sc/bwapi-data/BWTA:rw', '--volume', '/home/michal/.scbw/bwapi-data/BWTA2:/app/sc/bwapi-data/BWTA2:rw', '--net', 'sc_net', '--volume', '/home/michal/.scbw/bots/CherryPi/write/GAME_BED138A5_1:/app/sc/bwapi-data/write:rw', '-e', 'PLAYER_NAME=CherryPi', '-e', 'PLAYER_RACE=Z', '-e', 'NTH_PLAYER=1', '-e', 'NUM_PLAYERS=2', '-e', 'GAME_NAME=GAME_BED138A5', '-e', 'MAP_NAME=/app/sc/maps/sscai/(2)Benzene.scx', '-e', 'GAME_TYPE=FREE_FOR_ALL', '-e', 'SPEED_OVERRIDE=0', '-e', 'BOT_NAME=CherryPi', '-e', 'BOT_FILE=BWEnv.dll', 'starcraft:game', '/app/play_bot.sh', '--game', 'GAME_BED138A5', '--name', 'CherryPi', '--race', 'Z', '--lan', '--join']
+    DEBUG ['docker', 'run', '-d', '--rm', '--privileged', '--name', 'GAME_BED138A5_1_CherryPi', '--volume', '/home/michal/.observer/logs:/app/logs:rw', '--volume', '/home/michal/.observer/bots:/app/bots:ro', '--volume', '/home/michal/.observer/maps:/app/sc/maps:rw', '--volume', '/home/michal/.observer/bwapi-data/BWTA:/app/sc/bwapi-data/BWTA:rw', '--volume', '/home/michal/.observer/bwapi-data/BWTA2:/app/sc/bwapi-data/BWTA2:rw', '--net', 'sc_net', '--volume', '/home/michal/.observer/bots/CherryPi/write/GAME_BED138A5_1:/app/sc/bwapi-data/write:rw', '-e', 'PLAYER_NAME=CherryPi', '-e', 'PLAYER_RACE=Z', '-e', 'NTH_PLAYER=1', '-e', 'NUM_PLAYERS=2', '-e', 'GAME_NAME=GAME_BED138A5', '-e', 'MAP_NAME=/app/sc/maps/sscai/(2)Benzene.scx', '-e', 'GAME_TYPE=FREE_FOR_ALL', '-e', 'SPEED_OVERRIDE=0', '-e', 'BOT_NAME=CherryPi', '-e', 'BOT_FILE=BWEnv.dll', 'starcraft:game', '/app/play_bot.sh', '--game', 'GAME_BED138A5', '--name', 'CherryPi', '--race', 'Z', '--lan', '--join']
     INFO launched BotPlayer:CherryPi:Z in container GAME_BED138A5_1_CherryPi
     INFO Checking if game has launched properly...
     DEBUG running containers: ['d09d26611377', 'd70fd9a17961']
@@ -68,9 +68,9 @@ output of command `docker version`:
      OS/Arch:      linux/amd64
      Experimental: false
 
-### scbw version
+### observer version
 
-output of command `scbw.play -v`
+output of command `observer.play -v`
 
     0.2a16
 

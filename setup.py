@@ -5,10 +5,10 @@ Starcraft BW docker launcher.
 # Always prefer setuptools over distutils
 from setuptools import setup
 
-from scbw.defaults import VERSION
+from observer.defaults import VERSION
 
 setup(
-    name='scbw',
+    name='observer',
     version=VERSION,
     description='Multi-platform Version of StarCraft: Brood War in a Docker Container',
     long_description="This repository contains fully working StarCraft game running in Wine "
@@ -48,10 +48,10 @@ setup(
                       'pandas',
                       'matplotlib',
                       'docker'],
-    packages=['scbw'],
+    packages=['observer'],
     entry_points={  # Optional
         'console_scripts': [
-            'scbw.play=scbw.cli:main',
+            'observer=observer.cli:main',
         ],
     },
     python_requires='>=3.4',

@@ -43,13 +43,13 @@ Testing and reporting in other settings is very welcome!
 
 Launch headful play of [krasi0](http://sscaitournament.com/index.php?action=botDetails&bot=krasi0) and [CherryPi](https://sscaitournament.com/index.php?action=botDetails&bot=CherryPi) on default map.
 
-    $ scbw.play --bots "krasi0" "CherryPi" --show_all
+    $ observer.play --bots "krasi0" "CherryPi" --show_all
 
 Create game on the server (VNC viewer on port 5900) and wait for bots to join the game.
 
 ### Play against a bot
 
-    $ scbw.play --bots "PurpleWave" --human
+    $ observer.play --bots "PurpleWave" --human
 
 Select a map, specify your race, and wait for bot(s) to join the game :)
 

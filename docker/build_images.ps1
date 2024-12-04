@@ -8,7 +8,7 @@ if (-not $?) {throw "Failed to build starcraft:play image"}
 docker build -f dockerfiles/java.dockerfile  -t starcraft:java   .
 if (-not $?) {throw "Failed to build starcraft:java image. You can verify that you will build with proper version of Java in file dockerfiles/play.dockerfile"}
 
-Push-Location ../scbw/local_docker
+Push-Location ../observer/local_docker
 if (!(Test-Path starcraft.zip))
 {
     Invoke-WebRequest 'http://files.theabyss.ru/sc/starcraft.zip' -OutFile starcraft.zip

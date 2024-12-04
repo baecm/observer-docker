@@ -4,8 +4,8 @@ load 'libs/bats-support/load'
 load 'libs/bats-assert/load'
 
 
-@test "scbw.play is installed" {
-    command -v scbw.play
+@test "observer.play is installed" {
+    command -v observer.play
 }
 
 @test "ExampleBot loses against ZZZKBot" {
@@ -19,7 +19,7 @@ load 'libs/bats-assert/load'
     cp -r ZZZKBot $TEST_DIR/bots
     cp maps/\(2\)Benzene.scx $TEST_DIR/maps
 
-    run scbw.play \
+    run observer.play \
         --bots ExampleBot ZZZKBot \
         --log_level=WARN \
         --game_speed=0 \

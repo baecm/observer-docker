@@ -8,18 +8,18 @@ import time
 from argparse import Namespace
 from typing import List, Optional, Callable
 
-from scbw.bot_factory import retrieve_bots
-from scbw.bot_storage import LocalBotStorage, SscaitBotStorage
-from scbw.docker_utils import (
+from observer.bot_factory import retrieve_bots
+from observer.bot_storage import LocalBotStorage, SscaitBotStorage
+from observer.docker_utils import (
     dockermachine_ip, launch_game,
     remove_game_containers
 )
-from scbw.error import GameException, RealtimeOutedException
-from scbw.game_type import GameType
-from scbw.player import HumanPlayer, BotPlayer
-from scbw.plot import RealtimeFramePlotter
-from scbw.result import GameResult
-from scbw.vnc import check_vnc_exists
+from observer.error import GameException, RealtimeOutedException
+from observer.game_type import GameType
+from observer.player import HumanPlayer, BotPlayer
+from observer.plot import RealtimeFramePlotter
+from observer.result import GameResult
+from observer.vnc import check_vnc_exists
 
 logger = logging.getLogger(__name__)
 

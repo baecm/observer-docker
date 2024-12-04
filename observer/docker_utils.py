@@ -14,11 +14,11 @@ import docker
 import docker.errors
 import docker.types
 
-from scbw.error import ContainerException, DockerException, GameException, RealtimeOutedException
-from scbw.game_type import GameType
-from scbw.player import BotPlayer, HumanPlayer, Player
-from scbw.utils import random_string
-from scbw.vnc import launch_vnc_viewer
+from observer.error import ContainerException, DockerException, GameException, RealtimeOutedException
+from observer.game_type import GameType
+from observer.player import BotPlayer, HumanPlayer, Player
+from observer.utils import random_string
+from observer.vnc import launch_vnc_viewer
 
 logger = logging.getLogger(__name__)
 # disable docker package spam logging

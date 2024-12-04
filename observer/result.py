@@ -2,8 +2,8 @@ import json
 import logging
 from typing import List, Optional
 
-from scbw.logs import find_frames, find_unit_events, find_logs, find_replays, find_scores
-from scbw.player import Player
+from observer.logs import find_frames, find_unit_events, find_logs, find_replays, find_scores
+from observer.player import Player
 
 logger = logging.getLogger(__name__)
 

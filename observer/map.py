@@ -4,8 +4,8 @@ import os.path
 import shutil
 import tempfile
 
-from scbw.error import GameException
-from scbw.utils import download_extract_zip
+from observer.error import GameException
+from observer.utils import download_extract_zip
 
 
 

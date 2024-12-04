@@ -44,7 +44,7 @@ Test to check install was successful:
 
     docker run hello-world
 
-Now build the images required to run sc-docker. Enter the docker directory and run `build_images.sh`. Now you're setup to install scbw to manage the game containers.
+Now build the images required to run sc-docker. Enter the docker directory and run `build_images.sh`. Now you're setup to install observer to manage the game containers.
 
 You can manually [download docker of specified version](https://download.docker.com) if it is missing from list of packages. For example
 
@@ -60,8 +60,8 @@ Lazy version with a lot of sudo (based on [this](http://ubuntuhandbook.org/index
     sudo apt-get update
     sudo apt-get install -y python3.6
     curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
-    sudo pip3.6 install scbw
-    scbw.play --install
+    sudo pip3.6 install observer
+    observer.play --install
 
 ### VNC
 
@@ -104,7 +104,7 @@ Enter yor credentials:
 
 Sometimes popup for entering your credentials could appear after VNC window, so don't miss it.
 
-Now build the images required to run sc-docker. Enter the docker directory and run `build_images.ps1`. Now you're setup to install scbw to manage the game containers.
+Now build the images required to run sc-docker. Enter the docker directory and run `build_images.ps1`. Now you're setup to install observer to manage the game containers.
 
 ### Python & pip
 
@@ -112,10 +112,10 @@ Download and install Python 3.6 release from [Python releases for Windows](https
 
 You might need to [add python / pip to PATH](https://stackoverflow.com/a/4855685).
 
-Install `scbw` package in PowerShell:
+Install `observer` package in PowerShell:
 
-    pip install scbw
-    scbw.play --install
+    pip install observer
+    observer.play --install
 
 
 ### VNC
@@ -141,16 +141,16 @@ Test in terminal that install was successful:
 
 You might need to add `/Library` folder in `File Sharing` settings.sh
 
-Now build the images required to run sc-docker. Enter the docker directory and run `build_images.sh`. Now you're setup to install scbw to manage the game containers.
+Now build the images required to run sc-docker. Enter the docker directory and run `build_images.sh`. Now you're setup to install observer to manage the game containers.
 
 ### Python & pip
 
 Download and install Python 3.6 release from [Python releases for Mac Os X](https://www.python.org/downloads/mac-osx/)
 
-Install `scbw` package:
+Install `observer` package:
 
-    pip3.6 install scbw
-    scbw.play --install
+    pip3.6 install observer
+    observer.play --install
 
 ### VNC
 - [download RealVNC](https://www.realvnc.com/en/connect/download/viewer/macos/)

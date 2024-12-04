@@ -1,3 +1,3 @@
-include scbw/local_docker/game.dockerfile
-include scbw/local_docker/player.mpc
-include scbw/local_docker/player.spc
+include observer/local_docker/game.dockerfile
+include observer/local_docker/player.mpc
+include observer/local_docker/player.spc

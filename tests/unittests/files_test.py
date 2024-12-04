@@ -1,6 +1,6 @@
 import os
 import unittest
-from scbw.logs import find_logs
+from observer.logs import find_logs
 
 class TestFindFiles(unittest.TestCase):
     root_dir = os.path.dirname(__file__)
