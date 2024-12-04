@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 set -eux
 
-# do not publish observer:game
+# do not publish starcraft:game
 VERSION=$(python ../setup.py --version)
 
-docker tag observer:wine  cjdahrl/observer:wine
-docker tag observer:bwapi cjdahrl/observer:bwapi
-docker tag observer:java  cjdahrl/observer:java
-docker tag observer:play  cjdahrl/observer:play
-docker tag observer:wine  cjdahrl/observer:wine-${VERSION}
-docker tag observer:bwapi cjdahrl/observer:bwapi-${VERSION}
-docker tag observer:java  cjdahrl/observer:java-${VERSION}
-docker tag observer:play  cjdahrl/observer:play-${VERSION}
+docker tag starcraft:wine  cjdahrl/starcraft:wine
+docker tag starcraft:bwapi cjdahrl/starcraft:bwapi
+docker tag starcraft:java  cjdahrl/starcraft:java
+docker tag starcraft:play  cjdahrl/starcraft:play
+docker tag starcraft:wine  cjdahrl/starcraft:wine-${VERSION}
+docker tag starcraft:bwapi cjdahrl/starcraft:bwapi-${VERSION}
+docker tag starcraft:java  cjdahrl/starcraft:java-${VERSION}
+docker tag starcraft:play  cjdahrl/starcraft:play-${VERSION}
 
-docker push cjdahrl/observer:wine
-docker push cjdahrl/observer:bwapi
-docker push cjdahrl/observer:java
-docker push cjdahrl/observer:play
-docker push cjdahrl/observer:wine-${VERSION}
-docker push cjdahrl/observer:bwapi-${VERSION}
-docker push cjdahrl/observer:java-${VERSION}
-docker push cjdahrl/observer:play-${VERSION}
+docker push cjdahrl/starcraft:wine
+docker push cjdahrl/starcraft:bwapi
+docker push cjdahrl/starcraft:java
+docker push cjdahrl/starcraft:play
+docker push cjdahrl/starcraft:wine-${VERSION}
+docker push cjdahrl/starcraft:bwapi-${VERSION}
+docker push cjdahrl/starcraft:java-${VERSION}
+docker push cjdahrl/starcraft:play-${VERSION}

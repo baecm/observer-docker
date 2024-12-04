@@ -5,7 +5,7 @@ COPY . observer
 RUN    apt-get update \
 	&& apt-get install -qy curl \
 	&& curl -sSL https://get.docker.com/ | sh\
-	&& rm -rf /var/lib/apt/lists/* \
-	&& pip install observer/
-CMD ["observer.play"]
+	&& rm -rf /var/lib/apt/lists/* 
+	# && pip install observer/
+CMD ["observer"]
 

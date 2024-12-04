@@ -19,5 +19,5 @@ SC_BWAPI_DATA_BWTA2_DIR = f"{OBSERVER_BASE_DIR}/bwapi-data/BWTA2"
 SC_BOT_DIR = f"{OBSERVER_BASE_DIR}/bots"
 SC_MAP_DIR = f"{OBSERVER_BASE_DIR}/maps"
 
-SC_IMAGE = "observer:game"
-SC_JAVA_IMAGE = "observer:java"
+SC_IMAGE = "starcraft:game"
+SC_JAVA_IMAGE = "starcraft:java"

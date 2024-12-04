@@ -49,19 +49,15 @@ RUN set -x \
 #
 # Use the latest version of winetricks
 RUN set -x \
-  && apt-get update \
-  && apt-get install wget gnupg2 software-properties-common -y \
-  && dpkg --add-architecture i386 \
-  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-  && wget -nc https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/Release.key \
-  && apt-key add winehq.key \
-  && apt-key add Release.key \
-  && apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main' \
-  && add-apt-repository 'deb https://download.opensuse.org/repositories/Emulators:/Wine:/Debian/xUbuntu_18.04/ ./' \
-  && apt-get update -y \
-  && apt-get install -y --no-install-recommends xvfb xauth x11vnc winehq-stable winetricks \
-  # wine32 winetricks ca-certificates winbind \
-  && rm -rf /var/lib/apt/lists/*
+    && apt-get update \
+    && apt-get install -y wget gnupg2 software-properties-common \
+    && dpkg --add-architecture i386 \
+    && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+    && apt-key add winehq.key \
+    && apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ bionic main' \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends xvfb xauth x11vnc winehq-stable winetricks \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY scripts/winegui /usr/bin/winegui
 
@@ -81,4 +77,3 @@ VOLUME $LOG_DIR
 #
 # windows doesn't have sleep, but this hack seems to work :-)
 RUN set -eux && xvfb-run wine ping 127.0.0.1 -n 1 | cat
-
