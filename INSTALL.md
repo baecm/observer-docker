@@ -50,7 +50,7 @@ Enter yor credentials:
 
 Sometimes popup for entering your credentials could appear after VNC window, so don't miss it.
 
-Now build the images required to run observer. Enter the docker directory and run `build_images.sh`. Now you're setup to install observer to manage the game containers.
+Now build the images required to run observer. Enter the docker directory and run `build_images.ps1`. Now you're setup to install observer to manage the game containers.
 
     cd docker
     build_images.sh
