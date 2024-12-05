@@ -53,7 +53,9 @@ Sometimes popup for entering your credentials could appear after VNC window, so 
 Now build the images required to run observer. Enter the docker directory and run `build_images.ps1`. Now you're setup to install observer to manage the game containers.
 
     cd docker
-    build_images.sh
+    build_images.ps1
+
+When building the image for `starcraft:game`, there may be instances where Windows Defender quarantines the starcraft.zip file. To resolve this issue, simply allow the file through Windows Defender.
 
 ### Python & pip
 
