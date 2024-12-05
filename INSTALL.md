@@ -38,7 +38,7 @@ When docker prompt to share disk C, agree on that.
 
 <img src="resources/share_docker_folder_windows.png" alt="">
 
-Or, directly indicate directory on Settings,
+Or, directly indicate directory on Settings after run `starcraft:game` once,
 
 `Docker Desktop` > `Settings` > `Resources` > `File shareing` > `Virtual file shares`
 
