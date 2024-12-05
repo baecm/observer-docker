@@ -38,6 +38,12 @@ When docker prompt to share disk C, agree on that.
 
 <img src="resources/share_docker_folder_windows.png" alt="">
 
+Or, directly indicate directory on Settings,
+
+`Docker Desktop` > `Settings` > `Resources` > `File shareing` > `Virtual file shares`
+
+Add `C:\Users\{user}\AppData\Roaming`
+
 Enter yor credentials:
 
 <img src="resources/share_docker_folder_permissions_windows.png" alt="">
@@ -45,6 +51,9 @@ Enter yor credentials:
 Sometimes popup for entering your credentials could appear after VNC window, so don't miss it.
 
 Now build the images required to run observer. Enter the docker directory and run `build_images.sh`. Now you're setup to install observer to manage the game containers.
+
+    cd docker
+    build_images.sh
 
 ### Python & pip
 
