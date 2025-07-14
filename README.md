@@ -4,12 +4,12 @@ This repository prepares a fully working to extract/record data using BWAPI ```A
 
 ## Installation
 
-See [installation instructions for Windows](INSTALL.md).
+See [installation instructions for Windows / Linux](INSTALL.md).
 
 It should run well on new versions of major operating systems. It was tested on:
 
 - Microsoft Windows 10/11 (64-bit)
-- Ubuntu 22.04.01
+- Ubuntu 22.04.01, ```6.8.0-60-generic```
 
 ## Usage
 
