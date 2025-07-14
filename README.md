@@ -9,6 +9,7 @@ See [installation instructions for Windows](INSTALL.md).
 It should run well on new versions of major operating systems. It was tested on:
 
 - Microsoft Windows 10/11 (64-bit)
+- Ubuntu 22.04.01
 
 ## Usage
 
