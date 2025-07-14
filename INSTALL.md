@@ -13,13 +13,12 @@ Table of contents:
   * [Ubuntu](#ubuntu)
   <!-- * [Mac](#mac) -->
 
-Docker version used to build the images is `27.3.1, build ce12230`
-
 Currently supports only `Python >= 3.6`
 
 ## Windows
 
 ### Docker
+Docker version used to build the images is `27.3.1, build ce12230`
 
 You may want to [read through manual for installing docker on Windows](https://docs.docker.com/docker-for-windows/install/)
 for troubleshooting.
@@ -81,6 +80,8 @@ Install, and rename binary to `vnc-viewer.exe`, add the folder with the `vnc-vie
 
 ## Ubuntu
 ### Docker
+Docker version used to build the images is `Docker version 28.3.1, build 38b7060`
+
 Based on https://docs.docker.com/engine/install/ubuntu/
 ```bash
 # Add Docker's official GPG key:
@@ -110,7 +111,7 @@ Test to check install was successful:
 sudo docker run hello-world
 ```
 
-Now build the images required to run sc-docker. Enter the docker directory and run ```build_images.sh```. Now you're setup to install scbw to manage the game containers.
+Now build the images required to run sc-docker. Enter the docker directory and run `build_images.sh`. Now you're setup to install scbw to manage the game containers.
 
 ```bash
 cd docker
