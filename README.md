@@ -33,7 +33,6 @@ The GUI is going to be probably slower than normal game due to streaming via VNC
 
 ## Specification
 - StarCraft 1.16.1 game
-<!-- - bwheadless `v0.1` -->
 - wine `2.20.0~xenial`
 - base image from `sc-docker`
 

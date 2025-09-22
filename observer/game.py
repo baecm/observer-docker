@@ -9,7 +9,7 @@ from argparse import Namespace
 from typing import List, Optional, Callable
 
 from observer.bot_factory import retrieve_bots
-from observer.bot_storage import LocalBotStorage, SscaitBotStorage
+from observer.bot_storage import LocalBotStorage #, SscaitBotStorage
 from observer.docker_utils import (
     dockermachine_ip, launch_game,
     remove_game_containers
@@ -17,7 +17,7 @@ from observer.docker_utils import (
 from observer.error import GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import HumanPlayer, BotPlayer
-from observer.plot import RealtimeFramePlotter
+# from observer.plot import RealtimeFramePlotter
 from observer.result import GameResult
 from observer.vnc import check_vnc_exists
 
@@ -74,7 +74,7 @@ def run_game(
 
     bot_storages = (
         LocalBotStorage(args.bot_dir),
-        SscaitBotStorage(args.bot_dir)
+        # SscaitBotStorage(args.bot_dir)
     )
     players += retrieve_bots(args.bots, bot_storages)
 
@@ -88,14 +88,15 @@ def run_game(
     if wait_callback is None:
         wait_callback = lambda: time.sleep(3)
 
-    if args.plot_realtime:
-        plot_realtime = RealtimeFramePlotter(args.game_dir, game_name, players)
-
-        def _wait_callback():
-            plot_realtime.redraw()
-            wait_callback()
-    else:
-        _wait_callback = wait_callback
+    # if args.plot_realtime:
+    #     plot_realtime = RealtimeFramePlotter(args.game_dir, game_name, players)
+    #     def _wait_callback():
+    #         plot_realtime.redraw()
+    #         wait_callback()
+    # else:
+    #     _wait_callback = wait_callback
+    
+    _wait_callback = wait_callback
 
     # Seed override is empty string if not specified, integer otherwise
     seed_override = ""
@@ -153,8 +154,8 @@ def run_game(
         logger.info(f"Game cancelled.")
         raise
 
-    if args.plot_realtime:
-        plot_realtime.save(f"{args.game_dir}/{game_name}/frame_plot.png")
+    # if args.plot_realtime:
+    #     plot_realtime.save(f"{args.game_dir}/{game_name}/frame_plot.png")
 
     # move replay files
     replay_files = set(
