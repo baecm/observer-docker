@@ -163,39 +163,6 @@ def main():
         logger.info(f"Game {game_result.game_name} "
                     f"finished in {game_result.game_time:.2f} seconds.")
         logger.info("---")
-        logger.info("Logs are saved here:")
-        for log_file in sorted(game_result.log_files):
-            logger.info(log_file)
-        logger.info("---")
-
-        logger.info("Replays are saved here:")
-        for replay_file in sorted(game_result.replay_files):
-            logger.info(replay_file)
-        logger.info("---")
-
-        logger.info("Frame information is saved here:")
-        for frame_file in sorted(game_result.frame_files):
-            logger.info(frame_file)
-        logger.info("---")
-
-        logger.info("Unit event information is saved here:")
-        for event_file in sorted(game_result.unit_event_files):
-            logger.info(event_file)
-        logger.info("---")
-
-
-        logger.info("Game results are saved here:")
-        for score_file in sorted(game_result.score_files):
-            logger.info(score_file)
-        logger.info("---")
-
-        if game_result.is_valid:
-            logger.info(f"Winner is {game_result.winner_player} "
-                        f"(player {game_result.nth_winner_player})")
-
-            # the only print! Everything else goes to stderr!
-            print(game_result.nth_winner_player)
-            sys.exit(0)
 
         if game_result.is_realtime_outed:
             logger.error("Game has realtime outed!")
