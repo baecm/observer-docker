@@ -9,7 +9,6 @@ from observer.docker_utils import (
     ensure_docker_can_run, ensure_local_net,
     check_for_game_image
 )
-# from observer.map import download_bwta_caches, download_sscait_maps, download_season_maps
 from observer.utils import create_data_dirs
 
 logger = logging.getLogger(__name__)

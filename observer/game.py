@@ -88,14 +88,6 @@ def run_game(
     if wait_callback is None:
         wait_callback = lambda: time.sleep(3)
 
-    # if args.plot_realtime:
-    #     plot_realtime = RealtimeFramePlotter(args.game_dir, game_name, players)
-    #     def _wait_callback():
-    #         plot_realtime.redraw()
-    #         wait_callback()
-    # else:
-    #     _wait_callback = wait_callback
-    
     _wait_callback = wait_callback
 
     # Seed override is empty string if not specified, integer otherwise
@@ -153,9 +145,6 @@ def run_game(
         remove_game_containers(game_name)
         logger.info(f"Game cancelled.")
         raise
-
-    # if args.plot_realtime:
-    #     plot_realtime.save(f"{args.game_dir}/{game_name}/frame_plot.png")
 
     # move replay files
     replay_files = set(

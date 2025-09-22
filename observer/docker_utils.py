@@ -17,7 +17,6 @@ import docker.types
 from observer.error import ContainerException, DockerException, GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import BotPlayer, HumanPlayer, Player
-from observer.utils import random_string
 from observer.vnc import launch_vnc_viewer
 
 logger = logging.getLogger(__name__)

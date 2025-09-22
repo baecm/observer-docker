@@ -16,8 +16,7 @@ def check_vnc_exists():
 
 # def launch_vnc_viewer(host, port):
 #     os.spawnl(os.P_NOWAIT,
-#               shutil.which('vnc-viewer'), 'vnc-viewer', ('%s:%s' % (host,
-#                                                                     port)))
+#               shutil.which('vnc-viewer'), 'vnc-viewer', ('%s:%s' % (host, port)))
 
 def launch_vnc_viewer(host, port):
     # echo $PATH
