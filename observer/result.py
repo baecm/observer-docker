@@ -131,7 +131,6 @@ class GameResult:
         self._winner_player = self.players[self._nth_winner_player]
         self._loser_player = self.players[self._nth_loser_player]
         self._is_crashed = False
-        # todo: implement, maybe according to SSCAIT rules?
         self._is_gametime_outed = False
         self.score_results = scores
 

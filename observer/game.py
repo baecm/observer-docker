@@ -9,11 +9,8 @@ from argparse import Namespace
 from typing import List, Optional, Callable
 
 from observer.bot_factory import retrieve_bots
-from observer.bot_storage import LocalBotStorage #, SscaitBotStorage
-from observer.docker_utils import (
-    dockermachine_ip, launch_game,
-    remove_game_containers
-)
+from observer.bot_storage import LocalBotStorage
+from observer.docker_utils import dockermachine_ip, launch_game, remove_game_containers
 from observer.error import GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import HumanPlayer, BotPlayer

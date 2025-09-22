@@ -5,9 +5,7 @@ import sys
 
 import coloredlogs
 import docker
-from observer.defaults import (
-    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
-)
+from observer.defaults import SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
 from observer.docker_utils import BASE_VNC_PORT, VNC_HOST
 from observer.error import ScbwException
 from observer.game import run_game
