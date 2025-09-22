@@ -17,12 +17,11 @@ from observer.docker_utils import (
 from observer.error import GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import HumanPlayer, BotPlayer
-# from observer.plot import RealtimeFramePlotter
 from observer.result import GameResult
 from observer.vnc import check_vnc_exists
 
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 class GameArgs(Namespace):
     bots: List[str]

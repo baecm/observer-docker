@@ -1,2 +1,0 @@
-# StarCraft python launcher package
-

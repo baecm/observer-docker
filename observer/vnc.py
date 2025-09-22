@@ -3,7 +3,6 @@ import shutil
 import subprocess
 
 
-
 def check_vnc_exists():
     try:
         out = shutil.which('vnc-viewer')

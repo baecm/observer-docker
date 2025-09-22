@@ -6,8 +6,7 @@ from observer.defaults import (
     OBSERVER_BASE_DIR, SC_IMAGE, SC_GAME_DIR, SC_BOT_DIR, SC_MAP_DIR
 )
 from observer.docker_utils import (
-    ensure_docker_can_run, ensure_local_net,
-    check_for_game_image
+    ensure_docker_can_run, ensure_local_net, check_for_game_image
 )
 from observer.utils import create_data_dirs
 
