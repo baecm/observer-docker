@@ -7,7 +7,7 @@ import coloredlogs
 import docker
 from observer.defaults import SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
 from observer.docker_utils import BASE_VNC_PORT, VNC_HOST
-from observer.error import ScbwException
+from observer.error import ObserverException
 from observer.game import run_game
 from observer.game_type import GameType
 from observer.player import bot_regex, PlayerRace
@@ -93,10 +93,6 @@ parser.add_argument('--docker_image', type=str, default=SC_IMAGE,
                     help="The name of the image that should \n"
                          "be used to launch the game.\n"
                          "This helps with local development.")
-parser.add_argument('--plot_realtime', action='store_true',
-                    help="Allow realtime plotting of frame information.\n"
-                         "At the end of the game, this plot will be saved\n"
-                         "to file {GAME_DIR}/{GAME_NAME}/frame_plot.png")
 parser.add_argument('--mem_limit', type=str, default=None,
                     help="Limit started containers to the given amount of memory.")
 parser.add_argument('--nano_cpus', type=int, default=None,
@@ -111,10 +107,6 @@ def _image_version_up_to_date():
     client = docker.from_env()
     return any(tag == SC_IMAGE for image in client.images.list('starcraft') for tag in image.tags)
 
-
-# todo: add support for multi-PC play.
-# We need to think about how to setup docker IPs,
-# maybe we will need to specify manually routing tables? :/
 
 def main():
     args = parser.parse_args()
@@ -133,7 +125,7 @@ def main():
             install()
             if args.install:
                 sys.exit(0)
-        except ScbwException as e:
+        except ObserverException as e:
             logger.exception(e)
             sys.exit(1)
         except KeyboardInterrupt:
@@ -215,7 +207,7 @@ def main():
             logger.error("Game has crashed!")
             sys.exit(1)
 
-    except ScbwException as e:
+    except ObserverException as e:
         logger.exception(e)
         sys.exit(1)
 

@@ -40,7 +40,6 @@ class GameArgs(Namespace):
     auto_launch: bool
     show_all: bool
     allow_input: bool
-    plot_realtime: bool
     read_overwrite: bool
     docker_image: str
     nano_cpus: int
