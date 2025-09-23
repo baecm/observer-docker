@@ -30,6 +30,7 @@ The GUI is going to be probably slower than normal game due to streaming via VNC
 ## Known limitations
 
 - Headful mode needs to specify the replays manually due to "Unable to distribute map" bug.
+- Headless mode not work due to `bwheadless` not designed for replay files.
 
 ## Specification
 - StarCraft 1.16.1 game
