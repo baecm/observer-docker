@@ -69,7 +69,6 @@ def run_game(
 
     bot_storages = (
         LocalBotStorage(args.bot_dir),
-        # SscaitBotStorage(args.bot_dir)
     )
     players += retrieve_bots(args.bots, bot_storages)
 
