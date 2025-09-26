@@ -27,7 +27,7 @@ You can put the RealVNC client to fullscreen and play comfortably.
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
-## Known limitations
+## Known limitations 
 
 - Headful mode needs to specify the replays manually due to "Unable to distribute map" bug.
 - Headless mode not work due to `bwheadless` not designed for replay files.
@@ -51,16 +51,4 @@ You can use:
 These are latest stable images and are subject to change.
 
 ## About
-<!-- We are pleased to publish docker images for StarCraft: Brood War and BW bots!
-
-![Starcraft playing on Linux](resources/linux_play.png)
-
-This means the end of complicated game setup for newcomers or people
-
-who simply want to play StarCraft against AI bots.
-
-You can develop your bots on your favorite platform instead of relying on Windows.
-
-We have more things cooking: This is a part of our ongoing effort to create an easy-to-use environment for machine learning bots (bots that improve based on experience and self-play). -->
-
 This project is maintained by [Cognition and Intelligence Lab](http://cilab.gist.ac.kr/)
