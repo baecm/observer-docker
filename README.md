@@ -27,6 +27,8 @@ You can put the RealVNC client to fullscreen and play comfortably.
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
+**Due to a `known limitation`, both observer --extract and observer --record require manual replay selection inside the container after launch.**
+
 ## Known limitations 
 
 - Headful mode needs to specify the replays manually due to "Unable to distribute map" bug.
