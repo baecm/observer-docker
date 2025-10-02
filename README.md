@@ -1,3 +1,4 @@
+<!-- observer-docker/README.md -->
 # Observer docker images
 
 This repository prepares a fully working to extract/record data using BWAPI ```AIModule``` from StarCraft: Brood War game running in Wine inside of docker image.
@@ -14,13 +15,16 @@ It should run well on new versions of major operating systems. It was tested on:
 ## Usage
 
 ### Extract Data from replay
-
-    $ observer --extract
-
+```bash
+# On Windows, the default directory is %APPDATA%\observer\.
+# On Linux, it is ~/.observer/.
+# If the directory is empty, copy the ./bots folder (Extractor and Recorder) into it.
+observer --extract [--bot-dir <BOT_DIRECTORY>] [--game-dir <GAME_OUTPUT_DIRECTORY>]
+```
 ### Record spectating scene from replay
-
-    $ observer --record
-
+```bash
+observer --record [--bot_dir <BOT_DIRECTORY>]
+```
 You can put the RealVNC client to fullscreen and play comfortably.
 
 (Although you might want to change your screen resolution to 800x600)
@@ -44,12 +48,12 @@ The GUI is going to be probably slower than normal game due to streaming via VNC
 Images are available on [Dockerhub](https://hub.docker.com/r/cjdahrl/starcraft/).
 
 You can use:
-
-    cjdahrl/starcraft:wine
-    cjdahrl/starcraft:bwapi
-    cjdahrl/starcraft:java
-    cjdahrl/starcraft:play
-
+```
+cjdahrl/starcraft:wine
+cjdahrl/starcraft:bwapi
+cjdahrl/starcraft:java
+cjdahrl/starcraft:play
+```
 These are latest stable images and are subject to change.
 
 ## About
