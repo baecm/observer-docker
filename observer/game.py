@@ -57,9 +57,12 @@ def run_game(
     if args.headless and args.show_all:
         raise GameException("Cannot show all screens in headless mode")
 
-    # Each game is prefixed with "GAME_"
-    # this is needed for game filtering in docker ps
-    game_name = "GAME_" + args.game_name
+    if args.extract:
+        game_name = "Extractor"
+    elif args.record:
+        game_name = "Record"
+    else:
+        pass
 
     # Prepare players
     players = []

@@ -147,12 +147,12 @@ def main():
         args.bots = ['Recorder']
         args.game_speed = -1
 
-    if os.path.exists(f"{args.game_dir}/GAME_{args.game_name}"):
-        logger.info(f'Game {args.game_name} has already been played, '
-                    f'do you wish to continue (and remove logs) ? (Y/n)')
-        answer = input()
-        if answer.lower() not in ("", "yes", "y"):
-            sys.exit(1)
+    # if os.path.exists(f"{args.game_dir}/{args.bots}"):
+    #     logger.info(f'Game {args.game_name} has already been played, '
+    #                 f'do you wish to continue (and remove logs) ? (Y/n)')
+    #     answer = input()
+    #     if answer.lower() not in ("", "yes", "y"):
+    #         sys.exit(1)
 
     try:
         game_result = run_game(args)

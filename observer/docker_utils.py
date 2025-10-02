@@ -350,9 +350,9 @@ def launch_game(
     game_dir = launch_params["game_dir"]
     game_name = launch_params["game_name"]
 
-    if os.path.exists(f"{game_dir}/{game_name}"):
-        logger.info(f"removing existing game results of {game_name}")
-        shutil.rmtree(f"{game_dir}/{game_name}")
+    # if os.path.exists(f"{game_dir}/{game_name}"):
+    #     logger.info(f"removing existing game results of {game_name}")
+    #     shutil.rmtree(f"{game_dir}/{game_name}")
 
     for nth_player, player in enumerate(players):
         launch_image(player, nth_player=nth_player, num_players=len(players), **launch_params)
