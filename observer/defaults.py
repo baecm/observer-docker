@@ -10,7 +10,7 @@ def get_data_dir() -> str:
         return os.path.expanduser("~") + "/.observer"
 
 
-VERSION = "0.9.0"
+VERSION = "0.9.1"
 
 OBSERVER_BASE_DIR = get_data_dir()
 SC_GAME_DIR = f"{OBSERVER_BASE_DIR}/games"
