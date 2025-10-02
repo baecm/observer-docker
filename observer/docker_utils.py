@@ -381,12 +381,6 @@ def launch_game(
         containers = running_containers(game_name)
         if len(containers) == 0:  # game finished
             break
-        if len(containers) >= 2:  # update the last time when there were multiple containers
-            running_time = time.time()
-        if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
-            raise ContainerException(
-                f"One lingering container has been found after single container "
-                f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
         logger.debug(f"waiting. {containers}")
         wait_callback()
 
