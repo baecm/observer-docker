@@ -30,7 +30,6 @@ setup(
                       'requests',
                       'python-dateutil',
                       'pandas',
-                      'matplotlib',
                       'docker'],
     packages=['observer'],
     entry_points={  # Optional

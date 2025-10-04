@@ -4,7 +4,6 @@ from observer.bot_storage import BotStorage
 from observer.player import BotPlayer, PlayerRace
 
 
-
 def retrieve_bots(
     bot_specs: Iterable[str],
     bot_storages: Iterable[BotStorage]

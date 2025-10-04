@@ -1,16 +1,16 @@
-class ScbwException(Exception):
+class ObserverException(Exception):
     pass
 
 
-class GameException(ScbwException):
+class GameException(ObserverException):
     pass
 
 
-class PlayerException(ScbwException):
+class PlayerException(ObserverException):
     pass
 
 
-class DockerException(ScbwException):
+class DockerException(ObserverException):
     pass
 
 

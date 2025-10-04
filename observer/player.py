@@ -15,7 +15,6 @@ from observer.error import PlayerException
 from observer.utils import md5_file
 
 
-
 logger = logging.getLogger(__name__)
 
 SC_BOT_DIR = os.path.abspath("bots")
@@ -29,20 +28,16 @@ class PlayerRace(enum.Enum):
     RANDOM = 'R'
 
 
-
 class Player:
     name = "noname"
     race = PlayerRace.RANDOM
-
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}:{self.name}:{self.race.value}"
 
 
-
 class HumanPlayer(Player):
     name = "human"
-
 
 
 class BotType(enum.Enum):
@@ -50,7 +45,6 @@ class BotType(enum.Enum):
     EXE = "exe"
     JAVA = "jar"
     JYTHON = "jython"
-
 
 
 class BotJsonMeta:

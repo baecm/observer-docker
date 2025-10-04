@@ -17,7 +17,6 @@ import docker.types
 from observer.error import ContainerException, DockerException, GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import BotPlayer, HumanPlayer, Player
-from observer.utils import random_string
 from observer.vnc import launch_vnc_viewer
 
 logger = logging.getLogger(__name__)
@@ -351,9 +350,9 @@ def launch_game(
     game_dir = launch_params["game_dir"]
     game_name = launch_params["game_name"]
 
-    if os.path.exists(f"{game_dir}/{game_name}"):
-        logger.info(f"removing existing game results of {game_name}")
-        shutil.rmtree(f"{game_dir}/{game_name}")
+    # if os.path.exists(f"{game_dir}/{game_name}"):
+    #     logger.info(f"removing existing game results of {game_name}")
+    #     shutil.rmtree(f"{game_dir}/{game_name}")
 
     for nth_player, player in enumerate(players):
         launch_image(player, nth_player=nth_player, num_players=len(players), **launch_params)
@@ -382,12 +381,6 @@ def launch_game(
         containers = running_containers(game_name)
         if len(containers) == 0:  # game finished
             break
-        if len(containers) >= 2:  # update the last time when there were multiple containers
-            running_time = time.time()
-        if len(containers) == 1 and time.time() - running_time > MAX_TIME_RUNNING_SINGLE_CONTAINER:
-            raise ContainerException(
-                f"One lingering container has been found after single container "
-                f"timeout ({MAX_TIME_RUNNING_SINGLE_CONTAINER} sec), the game probably crashed.")
         logger.debug(f"waiting. {containers}")
         wait_callback()
 

@@ -5,11 +5,9 @@ import sys
 
 import coloredlogs
 import docker
-from observer.defaults import (
-    SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
-)
+from observer.defaults import SC_BOT_DIR, SC_GAME_DIR, SC_MAP_DIR, OBSERVER_BASE_DIR, SC_IMAGE, VERSION
 from observer.docker_utils import BASE_VNC_PORT, VNC_HOST
-from observer.error import ScbwException
+from observer.error import ObserverException
 from observer.game import run_game
 from observer.game_type import GameType
 from observer.player import bot_regex, PlayerRace
@@ -95,10 +93,6 @@ parser.add_argument('--docker_image', type=str, default=SC_IMAGE,
                     help="The name of the image that should \n"
                          "be used to launch the game.\n"
                          "This helps with local development.")
-parser.add_argument('--plot_realtime', action='store_true',
-                    help="Allow realtime plotting of frame information.\n"
-                         "At the end of the game, this plot will be saved\n"
-                         "to file {GAME_DIR}/{GAME_NAME}/frame_plot.png")
 parser.add_argument('--mem_limit', type=str, default=None,
                     help="Limit started containers to the given amount of memory.")
 parser.add_argument('--nano_cpus', type=int, default=None,
@@ -113,10 +107,6 @@ def _image_version_up_to_date():
     client = docker.from_env()
     return any(tag == SC_IMAGE for image in client.images.list('starcraft') for tag in image.tags)
 
-
-# todo: add support for multi-PC play.
-# We need to think about how to setup docker IPs,
-# maybe we will need to specify manually routing tables? :/
 
 def main():
     args = parser.parse_args()
@@ -135,7 +125,7 @@ def main():
             install()
             if args.install:
                 sys.exit(0)
-        except ScbwException as e:
+        except ObserverException as e:
             logger.exception(e)
             sys.exit(1)
         except KeyboardInterrupt:
@@ -157,12 +147,12 @@ def main():
         args.bots = ['Recorder']
         args.game_speed = -1
 
-    if os.path.exists(f"{args.game_dir}/GAME_{args.game_name}"):
-        logger.info(f'Game {args.game_name} has already been played, '
-                    f'do you wish to continue (and remove logs) ? (Y/n)')
-        answer = input()
-        if answer.lower() not in ("", "yes", "y"):
-            sys.exit(1)
+    # if os.path.exists(f"{args.game_dir}/{args.bots}"):
+    #     logger.info(f'Game {args.game_name} has already been played, '
+    #                 f'do you wish to continue (and remove logs) ? (Y/n)')
+    #     answer = input()
+    #     if answer.lower() not in ("", "yes", "y"):
+    #         sys.exit(1)
 
     try:
         game_result = run_game(args)
@@ -173,39 +163,6 @@ def main():
         logger.info(f"Game {game_result.game_name} "
                     f"finished in {game_result.game_time:.2f} seconds.")
         logger.info("---")
-        logger.info("Logs are saved here:")
-        for log_file in sorted(game_result.log_files):
-            logger.info(log_file)
-        logger.info("---")
-
-        logger.info("Replays are saved here:")
-        for replay_file in sorted(game_result.replay_files):
-            logger.info(replay_file)
-        logger.info("---")
-
-        logger.info("Frame information is saved here:")
-        for frame_file in sorted(game_result.frame_files):
-            logger.info(frame_file)
-        logger.info("---")
-
-        logger.info("Unit event information is saved here:")
-        for event_file in sorted(game_result.unit_event_files):
-            logger.info(event_file)
-        logger.info("---")
-
-
-        logger.info("Game results are saved here:")
-        for score_file in sorted(game_result.score_files):
-            logger.info(score_file)
-        logger.info("---")
-
-        if game_result.is_valid:
-            logger.info(f"Winner is {game_result.winner_player} "
-                        f"(player {game_result.nth_winner_player})")
-
-            # the only print! Everything else goes to stderr!
-            print(game_result.nth_winner_player)
-            sys.exit(0)
 
         if game_result.is_realtime_outed:
             logger.error("Game has realtime outed!")
@@ -217,7 +174,7 @@ def main():
             logger.error("Game has crashed!")
             sys.exit(1)
 
-    except ScbwException as e:
+    except ObserverException as e:
         logger.exception(e)
         sys.exit(1)
 
