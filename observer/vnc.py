@@ -26,7 +26,9 @@ def launch_vnc_viewer(host, port):
         raise FileNotFoundError("VNC Viewer executable not found in PATH.")
     
     # Construct the command
-    command = [vnc_path, f'{host}:{port}']
+    # host::port is a raw port for both RealVNC and TigerVNC
+    # (TigerVNC reads host:5900 as display 5900, i.e. port 11800)
+    command = [vnc_path, f'{host}::{port}']
     
     # Launch the VNC Viewer
     try:
