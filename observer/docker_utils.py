@@ -157,6 +157,7 @@ def launch_image(
         headless: bool,
         game_name: str,
         map_name: str,
+        watch_replay: str,
         game_type: GameType,
         game_speed: int,
         seed_override: str,
@@ -207,6 +208,7 @@ def launch_image(
         NUM_PLAYERS=num_players,
         GAME_NAME=game_name,
         MAP_NAME=f"/app/sc/maps/{map_name}",
+        WATCH_REPLAY=watch_replay,
         GAME_TYPE=game_type.value,
         SPEED_OVERRIDE=game_speed,
         SEED_OVERRIDE=seed_override,
@@ -370,10 +372,13 @@ def launch_game(
             logger.info(f"launching vnc viewer for {player} on address {host}:{port}")
             launch_vnc_viewer(host, port)
 
-        logger.info("\n"
-                    "In headful mode, you must specify and start the game manually.\n"
-                    "Select the map, wait for bots to join the game "
-                    "and then start the game.")
+        if launch_params["watch_replay"]:
+            logger.info(f"replay {launch_params['watch_replay']} is opened by BWAPI.")
+        else:
+            logger.info("\n"
+                        "In headful mode, you must specify and start the game manually.\n"
+                        "Select the map, wait for bots to join the game "
+                        "and then start the game.")
 
     logger.info(f"waiting until game {game_name} is finished...")
     running_time = time.time()

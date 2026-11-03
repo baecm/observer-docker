@@ -3,6 +3,8 @@ import glob
 import json
 import logging
 import os
+import re
+import shutil
 import signal
 import time
 from argparse import Namespace
@@ -44,6 +46,19 @@ class GameArgs(Namespace):
     docker_image: str
     nano_cpus: int
     mem_limit: str
+    replay: Optional[str]
+
+
+def stage_replay(replay: str, map_dir: str) -> str:
+    """
+    Copy the replay into the mounted map dir and return its path
+    as BWAPI sees it (relative to the StarCraft dir).
+    """
+    # bwapi.ini is edited with sed, so keep the name to safe characters
+    name = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(replay))
+    os.makedirs(f"{map_dir}/replays/input", exist_ok=True)
+    shutil.copyfile(replay, f"{map_dir}/replays/input/{name}")
+    return f"maps/replays/input/{name}"
 
 
 def run_game(
@@ -92,19 +107,26 @@ def run_game(
     if args.seed_override is not None:
         seed_override = str(args.seed_override)
 
+    watch_replay = ""
+    if args.replay is not None:
+        watch_replay = stage_replay(args.replay, args.map_dir)
+        logger.info(f"replay {args.replay} staged as {watch_replay}")
+
     # Prepare game launching
     launch_params = dict(
         # game settings
         headless=args.headless,
         game_name=game_name,
         map_name=args.map,
+        watch_replay=watch_replay,
         game_type=GameType(args.game_type),
         game_speed=args.game_speed,
         seed_override=seed_override,
         timeout=args.timeout,
         timeout_at_frame=args.timeout_at_frame,
         allow_input=args.allow_input,
-        auto_launch=args.auto_launch,
+        # the key presses of auto launch would go into the opened replay
+        auto_launch=args.auto_launch and not watch_replay,
 
         # mount dirs
         game_dir=args.game_dir,

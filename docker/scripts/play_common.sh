@@ -56,10 +56,15 @@ function prepare_bwapi() {
     sed -i "s:^speed_override = :speed_override = $SPEED_OVERRIDE:g" "${BWAPI_INI}"
     sed -i "s:^seed_override = :seed_override = $SEED_OVERRIDE:g" "${BWAPI_INI}"
 
+    # A replay given on the command line is opened by BWAPI's single player
+    # auto menu (map = <replay>), so it needs no manual selection.
+    if [ -n "$WATCH_REPLAY" ]; then
+        sed -i "s:^auto_menu = .*:auto_menu = SINGLE_PLAYER:g" "${BWAPI_INI}"
+        sed -i "s:^map = :map = $WATCH_REPLAY:g" "${BWAPI_INI}"
     # todo: solve bug with "Unable to distribute map"
     # hotfix for headful mode, but we need to select map unfortunately
     # it works for headless mode
-    if [ "$IS_HEADFUL" == "1" ]; then
+    elif [ "$IS_HEADFUL" == "1" ]; then
         sed -i "s:^game = :game = JOIN_FIRST:g" "${BWAPI_INI}"
     else
         if [ $NTH_PLAYER == "0" ]; then # if is_server

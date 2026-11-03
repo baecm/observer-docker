@@ -24,6 +24,11 @@ parser.add_argument('--install', action='store_true',
                          "Needed to run the first time after `pip install`.")
 parser.add_argument('--extract', action='store_true')
 parser.add_argument('--record', action='store_true')
+parser.add_argument('--replay', type=str, metavar="REPLAY.rep", default=None,
+                    help="Replay file to open (path on this machine).\n"
+                         "It is copied to <map_dir>/replays/input/ and opened\n"
+                         "by BWAPI, so no manual selection is needed.\n"
+                         "If not set, select the replay inside the container.")
 parser.add_argument('--map', type=str, metavar="MAP.scx", default="sscai/(2)Benzene.scx",
                     help="Name of map on which SC should be played,\n"
                          "relative to --map_dir")
@@ -139,6 +144,14 @@ def main():
     if not args.extract and not args.record:
         parser.error('the following arguments are required: --extract or --record')
         # parser.error exits
+
+    if args.replay is not None:
+        if not os.path.isfile(args.replay):
+            parser.error(f'replay file {args.replay} was not found')
+        if not args.replay.lower().endswith('.rep'):
+            parser.error(f'replay file {args.replay} is not a .rep file')
+        if args.headless:
+            parser.error('--replay needs headful mode (bwheadless cannot open replays)')
 
     if args.extract:
         args.bots = ['Extractor']

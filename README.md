@@ -19,23 +19,25 @@ It should run well on new versions of major operating systems. It was tested on:
 # On Windows, the default directory is %APPDATA%\observer\.
 # On Linux, it is ~/.observer/.
 # If the directory is empty, copy the ./bots folder (Extractor and Recorder) into it.
-observer --extract [--bot-dir <BOT_DIRECTORY>] [--game-dir <GAME_OUTPUT_DIRECTORY>]
+observer --extract [--replay <REPLAY.rep>] [--bot-dir <BOT_DIRECTORY>] [--game-dir <GAME_OUTPUT_DIRECTORY>]
 ```
 ### Record spectating scene from replay
 ```bash
-observer --record [--bot_dir <BOT_DIRECTORY>]
+observer --record [--replay <REPLAY.rep>] [--bot_dir <BOT_DIRECTORY>]
 ```
+
+`--replay` copies the replay to `<map_dir>/replays/input/` and BWAPI opens it on start (single player auto menu), so no manual selection is needed. Without it, select the replay inside the container.
 You can put the RealVNC client to fullscreen and play comfortably.
 
 (Although you might want to change your screen resolution to 800x600)
 
 The GUI is going to be probably slower than normal game due to streaming via VNC.
 
-**Due to a `known limitation`, both observer --extract and observer --record require manual replay selection inside the container after launch.**
+**Without `--replay`, both observer --extract and observer --record require manual replay selection inside the container after launch.**
 
 ## Known limitations 
 
-- Headful mode needs to specify the replays manually due to "Unable to distribute map" bug.
+- Headful mode needs to specify the replays manually due to "Unable to distribute map" bug, unless `--replay` is given (not yet tested in the container).
 - Headless mode not work due to `bwheadless` not designed for replay files.
 
 ## Specification
