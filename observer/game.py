@@ -1,4 +1,5 @@
 import enum
+import filecmp
 import glob
 import json
 import logging
@@ -47,7 +48,8 @@ class GameArgs(Namespace):
     nano_cpus: int
     mem_limit: str
     replay: Optional[str]
-    preset: Optional[str]
+    preset: Optional[List[str]]
+    labels: Optional[List[str]]
 
 
 def stage_replay(replay: str, map_dir: str) -> str:
@@ -57,20 +59,25 @@ def stage_replay(replay: str, map_dir: str) -> str:
     """
     # bwapi.ini is edited with sed, so keep the name to safe characters
     name = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(replay))
-    os.makedirs(f"{map_dir}/replays/input", exist_ok=True)
-    shutil.copyfile(replay, f"{map_dir}/replays/input/{name}")
+    dst = f"{map_dir}/replays/input/{name}"
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    # a game started earlier may be reading the same replay; don't rewrite it
+    if not (os.path.isfile(dst) and filecmp.cmp(replay, dst, shallow=False)):
+        shutil.copyfile(replay, dst)
     return f"maps/replays/input/{name}"
 
 
-def stage_preset(track: str, watch_replay: str, bot_dir: str) -> str:
+def stage_preset(track: str, label: str, watch_replay: str, bot_dir: str) -> str:
     """
     Copy a camera track to where PresetObserver reads it:
     read/preset/<mapFileName>.vpd, and in a replay mapFileName()
-    is the replay's file name.
+    is the replay's file name. The label it shows goes next to it.
     """
     dst = f"{bot_dir}/read/preset/{os.path.basename(watch_replay)}.vpd"
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     shutil.copyfile(track, dst)
+    with open(f"{bot_dir}/read/preset/label.txt", "w") as f:
+        f.write(label + "\n")
     return dst
 
 
@@ -86,7 +93,9 @@ def run_game(
         raise GameException("Cannot show all screens in headless mode")
 
     if args.preset is not None:
-        game_name = "Preset"
+        # several tracks of one replay can play side by side, so each run
+        # gets its own containers, logs and bot copy
+        game_name = f"Preset_{args.game_name}"
     elif args.extract:
         game_name = "Extractor"
     elif args.record:
@@ -100,10 +109,20 @@ def run_game(
     if args.bots is None:
         args.bots = []
 
-    bot_storages = (
-        LocalBotStorage(args.bot_dir),
-    )
-    players += retrieve_bots(args.bots, bot_storages)
+    if args.preset is not None:
+        # one bot copy per viewer, each reading its own track
+        for nth, _ in enumerate(args.preset):
+            bot_dir = f"{args.game_dir}/{game_name}/bots_{nth}/PresetObserver"
+            shutil.copytree(f"{args.bot_dir}/PresetObserver", bot_dir, dirs_exist_ok=True)
+            player = BotPlayer(bot_dir)
+            # StarCraft refuses a player whose name is already in the game
+            player.name = f"Preset{nth}"
+            players.append(player)
+    else:
+        bot_storages = (
+            LocalBotStorage(args.bot_dir),
+        )
+        players += retrieve_bots(args.bots, bot_storages)
 
     is_1v1_game = len(players) == 2
 
@@ -128,8 +147,10 @@ def run_game(
         logger.info(f"replay {args.replay} staged as {watch_replay}")
 
     if args.preset is not None:
-        track = stage_preset(args.preset, watch_replay, players[0].bot_dir)
-        logger.info(f"camera track {args.preset} staged as {track}")
+        labels = args.labels or [f"Camera {n + 1}" for n in range(len(args.preset))]
+        for track, label, player in zip(args.preset, labels, players):
+            staged = stage_preset(track, label, watch_replay, player.bot_dir)
+            logger.info(f"camera track {track} staged as {staged} ({label})")
 
     # Prepare game launching
     launch_params = dict(

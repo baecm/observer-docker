@@ -24,10 +24,15 @@ parser.add_argument('--install', action='store_true',
                          "Needed to run the first time after `pip install`.")
 parser.add_argument('--extract', action='store_true')
 parser.add_argument('--record', action='store_true')
-parser.add_argument('--preset', type=str, metavar="TRACK.vpd", default=None,
+parser.add_argument('--preset', type=str, nargs='+', metavar="TRACK.vpd", default=None,
                     help="Replay the camera track in TRACK.vpd (frame,vpx,vpy)\n"
                          "with the PresetObserver bot. Needs --replay; the file\n"
-                         "is copied to the bot's read/preset/<replay>.vpd.")
+                         "is copied to the bot's read/preset/<replay>.vpd.\n"
+                         "Several tracks: one viewer per track, all watching\n"
+                         "the replay together in one LAN game.")
+parser.add_argument('--labels', type=str, nargs='+', metavar="LABEL", default=None,
+                    help="Text each --preset camera shows top left, one per track.\n"
+                         "Default: 'Camera <n>' in track order.")
 parser.add_argument('--replay', type=str, metavar="REPLAY.rep", default=None,
                     help="Replay file to open (path on this machine).\n"
                          "It is copied to <map_dir>/replays/input/ and opened\n"
@@ -152,8 +157,11 @@ def main():
     if args.preset is not None:
         if args.replay is None:
             parser.error('--preset needs --replay (the track belongs to one replay)')
-        if not os.path.isfile(args.preset):
-            parser.error(f'camera track {args.preset} was not found')
+        for track in args.preset:
+            if not os.path.isfile(track):
+                parser.error(f'camera track {track} was not found')
+        if args.labels is not None and len(args.labels) != len(args.preset):
+            parser.error('--labels needs one label per --preset track')
 
     if args.replay is not None:
         if not os.path.isfile(args.replay):
@@ -171,7 +179,8 @@ def main():
         args.game_speed = -1
 
     if args.preset is not None:
-        args.bots = ['PresetObserver']
+        args.bots = ['PresetObserver'] * len(args.preset)
+        args.show_all = True  # a VNC viewer per track
         args.game_speed = -1
 
     # if os.path.exists(f"{args.game_dir}/{args.bots}"):

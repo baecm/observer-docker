@@ -56,9 +56,23 @@ function prepare_bwapi() {
     sed -i "s:^speed_override = :speed_override = $SPEED_OVERRIDE:g" "${BWAPI_INI}"
     sed -i "s:^seed_override = :seed_override = $SEED_OVERRIDE:g" "${BWAPI_INI}"
 
-    # A replay given on the command line is opened by BWAPI's single player
-    # auto menu (map = <replay>), so it needs no manual selection.
-    if [ -n "$WATCH_REPLAY" ]; then
+    # A replay given on the command line is opened by BWAPI's auto menu
+    # (map = <replay>), so it needs no manual selection. Alone it is a single
+    # player replay; with more players the server hosts it as a LAN game
+    # (UDP over the docker network) and the others join to watch it together.
+    # Every container mounts the same maps dir, so the replay needs no download.
+    if [ -n "$WATCH_REPLAY" ] && [ "$NUM_PLAYERS" -gt 1 ]; then
+        sed -i "s:^auto_menu = .*:auto_menu = LAN:g" "${BWAPI_INI}"
+        sed -i "s:^lan_mode = .*:lan_mode = Local Area Network (UDP):g" "${BWAPI_INI}"
+        # a LAN game is listed under its host's name
+        if [ $NTH_PLAYER == "0" ]; then # if is_server
+            sed -i "s:^map = :map = $WATCH_REPLAY:g" "${BWAPI_INI}"
+            # start as soon as every viewer is in, not after wait_for_time
+            sed -i "s:^wait_for_max_players = .*:wait_for_max_players = $NUM_PLAYERS:g" "${BWAPI_INI}"
+        else
+            sed -i "s:^game = :game = ${HOST_NAME}:g" "${BWAPI_INI}"
+        fi
+    elif [ -n "$WATCH_REPLAY" ]; then
         sed -i "s:^auto_menu = .*:auto_menu = SINGLE_PLAYER:g" "${BWAPI_INI}"
         sed -i "s:^map = :map = $WATCH_REPLAY:g" "${BWAPI_INI}"
     # todo: solve bug with "Unable to distribute map"

@@ -159,6 +159,7 @@ def launch_image(
         player: Player,
         nth_player: int,
         num_players: int,
+        host_name: str,
 
         # game settings
         headless: bool,
@@ -213,6 +214,7 @@ def launch_image(
         PLAYER_RACE=player.race.value,
         NTH_PLAYER=nth_player,
         NUM_PLAYERS=num_players,
+        HOST_NAME=host_name,
         GAME_NAME=game_name,
         MAP_NAME=f"/app/sc/maps/{map_name}",
         WATCH_REPLAY=watch_replay,
@@ -364,7 +366,11 @@ def launch_game(
     #     shutil.rmtree(f"{game_dir}/{game_name}")
 
     for nth_player, player in enumerate(players):
-        launch_image(player, nth_player=nth_player, num_players=len(players), **launch_params)
+        if nth_player > 1 and launch_params["watch_replay"]:
+            # joiners of a shared replay join one at a time
+            time.sleep(10)
+        launch_image(player, nth_player=nth_player, num_players=len(players),
+                     host_name=players[0].name, **launch_params)
 
     logger.debug("checking if game has launched properly...")
     time.sleep(1)
