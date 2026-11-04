@@ -81,7 +81,14 @@ def ensure_local_net(
     output = networks[0].short_id if networks else None
     if not output:
         logger.info("network not found, creating ...")
-        output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
+        try:
+            output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK, ipam=ipam_config).short_id
+        except docker.errors.APIError as e:
+            # nothing depends on the subnet itself, so let docker pick a free one
+            if "overlaps" not in str(e):
+                raise
+            logger.warning(f"subnet {subnet_cidr} is taken, letting docker pick one")
+            output = docker_client.networks.create(DOCKER_STARCRAFT_NETWORK).short_id
     logger.debug(f"docker network id: {output}")
 
 
