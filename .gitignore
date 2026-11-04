@@ -50,3 +50,6 @@ scripts/py36to34.py
 # VSCode
 .vscode/
 docker/.Rhistory
+
+# camera tracks staged by --preset
+bots/*/read/preset/*.vpd

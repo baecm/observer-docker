@@ -24,6 +24,10 @@ parser.add_argument('--install', action='store_true',
                          "Needed to run the first time after `pip install`.")
 parser.add_argument('--extract', action='store_true')
 parser.add_argument('--record', action='store_true')
+parser.add_argument('--preset', type=str, metavar="TRACK.vpd", default=None,
+                    help="Replay the camera track in TRACK.vpd (frame,vpx,vpy)\n"
+                         "with the PresetObserver bot. Needs --replay; the file\n"
+                         "is copied to the bot's read/preset/<replay>.vpd.")
 parser.add_argument('--replay', type=str, metavar="REPLAY.rep", default=None,
                     help="Replay file to open (path on this machine).\n"
                          "It is copied to <map_dir>/replays/input/ and opened\n"
@@ -141,9 +145,15 @@ def main():
                      f'Did you run "observer --install"?')
         # parser.error exits
 
-    if not args.extract and not args.record:
-        parser.error('the following arguments are required: --extract or --record')
+    if not args.extract and not args.record and args.preset is None:
+        parser.error('the following arguments are required: --extract, --record or --preset')
         # parser.error exits
+
+    if args.preset is not None:
+        if args.replay is None:
+            parser.error('--preset needs --replay (the track belongs to one replay)')
+        if not os.path.isfile(args.preset):
+            parser.error(f'camera track {args.preset} was not found')
 
     if args.replay is not None:
         if not os.path.isfile(args.replay):
@@ -158,6 +168,10 @@ def main():
     
     if args.record:
         args.bots = ['Recorder']
+        args.game_speed = -1
+
+    if args.preset is not None:
+        args.bots = ['PresetObserver']
         args.game_speed = -1
 
     # if os.path.exists(f"{args.game_dir}/{args.bots}"):

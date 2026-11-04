@@ -47,6 +47,7 @@ class GameArgs(Namespace):
     nano_cpus: int
     mem_limit: str
     replay: Optional[str]
+    preset: Optional[str]
 
 
 def stage_replay(replay: str, map_dir: str) -> str:
@@ -61,6 +62,18 @@ def stage_replay(replay: str, map_dir: str) -> str:
     return f"maps/replays/input/{name}"
 
 
+def stage_preset(track: str, watch_replay: str, bot_dir: str) -> str:
+    """
+    Copy a camera track to where PresetObserver reads it:
+    read/preset/<mapFileName>.vpd, and in a replay mapFileName()
+    is the replay's file name.
+    """
+    dst = f"{bot_dir}/read/preset/{os.path.basename(watch_replay)}.vpd"
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    shutil.copyfile(track, dst)
+    return dst
+
+
 def run_game(
         args: GameArgs,
         wait_callback: Optional[Callable] = None
@@ -72,7 +85,9 @@ def run_game(
     if args.headless and args.show_all:
         raise GameException("Cannot show all screens in headless mode")
 
-    if args.extract:
+    if args.preset is not None:
+        game_name = "Preset"
+    elif args.extract:
         game_name = "Extractor"
     elif args.record:
         game_name = "Record"
@@ -111,6 +126,10 @@ def run_game(
     if args.replay is not None:
         watch_replay = stage_replay(args.replay, args.map_dir)
         logger.info(f"replay {args.replay} staged as {watch_replay}")
+
+    if args.preset is not None:
+        track = stage_preset(args.preset, watch_replay, players[0].bot_dir)
+        logger.info(f"camera track {args.preset} staged as {track}")
 
     # Prepare game launching
     launch_params = dict(
