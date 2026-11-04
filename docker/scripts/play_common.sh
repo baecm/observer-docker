@@ -277,6 +277,16 @@ function update_registry() {
     wine REG ADD "${REG_KEY}" /v Path1 /t REG_EXPAND_SZ /d "Z:\app\sc\characters"
 }
 
+function start_shared_replay() {
+    # BWAPI's auto start does not fire in a headful LAN game, so the server
+    # clicks the lobby's Start once every viewer has had time to join
+    # (REPLAY_START_DELAY, set by observer from the joiners' launch times)
+    sleep "${REPLAY_START_DELAY:-60}"
+    LOG "Clicking Start of the shared replay" >> "$LOG_GAME"
+    # position of the start button, as in auto_launch
+    xdotool mousemove 521 395 click 1
+}
+
 function auto_launch() {
     # This a hacky way to go around "Unable to distribute map" bug
     # that I couldn't debug. Basically send appropriate keys to Starcraft to start the game.

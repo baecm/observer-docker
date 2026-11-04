@@ -11,9 +11,12 @@ from observer.error import ObserverException
 from observer.game import run_game
 from observer.game_type import GameType
 from observer.player import bot_regex, PlayerRace
+from observer.replay import replay_players
 from observer.utils import random_string
 
 logger = logging.getLogger(__name__)
+
+MAX_VIEWERS = 3
 
 parser = argparse.ArgumentParser(
     description='Launch StarCraft docker images for bot/human headless/headful play',
@@ -30,6 +33,13 @@ parser.add_argument('--preset', type=str, nargs='+', metavar="TRACK.vpd", defaul
                          "is copied to the bot's read/preset/<replay>.vpd.\n"
                          "Several tracks: one viewer per track, all watching\n"
                          "the replay together in one LAN game.")
+parser.add_argument('--tracks', type=str, metavar="DIR", default=None,
+                    help="Instead of --preset: a folder of demo_vpd.py tracks.\n"
+                         "Viewer k plays DIR/top<k>/<replay file>.vpd.")
+parser.add_argument('--viewers', type=int, choices=range(1, MAX_VIEWERS + 1), default=None,
+                    help=f"How many viewers (containers) --tracks starts, 1-{MAX_VIEWERS}.\n"
+                         "Default: as many as the replay has players, at most "
+                         f"{MAX_VIEWERS}.")
 parser.add_argument('--labels', type=str, nargs='+', metavar="LABEL", default=None,
                     help="Text each --preset camera shows top left, one per track.\n"
                          "Default: 'Camera <n>' in track order.")
@@ -150,18 +160,9 @@ def main():
                      f'Did you run "observer --install"?')
         # parser.error exits
 
-    if not args.extract and not args.record and args.preset is None:
-        parser.error('the following arguments are required: --extract, --record or --preset')
+    if not args.extract and not args.record and args.preset is None and args.tracks is None:
+        parser.error('the following arguments are required: --extract, --record, --preset or --tracks')
         # parser.error exits
-
-    if args.preset is not None:
-        if args.replay is None:
-            parser.error('--preset needs --replay (the track belongs to one replay)')
-        for track in args.preset:
-            if not os.path.isfile(track):
-                parser.error(f'camera track {track} was not found')
-        if args.labels is not None and len(args.labels) != len(args.preset):
-            parser.error('--labels needs one label per --preset track')
 
     if args.replay is not None:
         if not os.path.isfile(args.replay):
@@ -170,6 +171,30 @@ def main():
             parser.error(f'replay file {args.replay} is not a .rep file')
         if args.headless:
             parser.error('--replay needs headful mode (bwheadless cannot open replays)')
+
+    if args.viewers is not None and args.tracks is None:
+        parser.error('--viewers goes with --tracks')
+    if args.tracks is not None or args.preset is not None:
+        if args.replay is None:
+            parser.error('--preset/--tracks need --replay (a track belongs to one replay)')
+        # viewers of one replay join one LAN game, which takes at most
+        # as many as the replay's players
+        players = len(replay_players(args.replay))
+    if args.tracks is not None:
+        if args.preset is not None:
+            parser.error('give --tracks or --preset, not both')
+        viewers = args.viewers or min(MAX_VIEWERS, players)
+        args.preset = [os.path.join(args.tracks, f"top{k}", os.path.basename(args.replay) + ".vpd")
+                       for k in range(1, viewers + 1)]
+    if args.preset is not None:
+        if len(args.preset) > players:
+            parser.error(f'{len(args.preset)} viewers, but {os.path.basename(args.replay)} '
+                         f'has {players} players: a replay lobby takes at most that many')
+        for track in args.preset:
+            if not os.path.isfile(track):
+                parser.error(f'camera track {track} was not found')
+        if args.labels is not None and len(args.labels) != len(args.preset):
+            parser.error('--labels needs one label per --preset track')
 
     if args.extract:
         args.bots = ['Extractor']

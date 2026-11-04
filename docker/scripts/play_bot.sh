@@ -51,6 +51,10 @@ if [ "$IS_HEADFUL" == "1" ] && [ $NTH_PLAYER == "0" ] && [ "$HEADFUL_AUTO_LAUNCH
     auto_launch
 fi
 
+if [ $NTH_PLAYER == "0" ] && [ -n "$WATCH_REPLAY" ] && [ "$NUM_PLAYERS" -gt 1 ]; then # if is_server
+    start_shared_replay &
+fi
+
 if [ "$CAPTURE_MOUSE_MOVEMENT" == "1" ]; then
     /app/play_capture_mouse_movement.sh &
 fi

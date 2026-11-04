@@ -215,6 +215,9 @@ def launch_image(
         NTH_PLAYER=nth_player,
         NUM_PLAYERS=num_players,
         HOST_NAME=host_name,
+        # the server clicks Start of a shared replay after the last joiner,
+        # launched 10 s after the one before it, has had time to join
+        REPLAY_START_DELAY=60 + 10 * max(num_players - 2, 0),
         GAME_NAME=game_name,
         MAP_NAME=f"/app/sc/maps/{map_name}",
         WATCH_REPLAY=watch_replay,

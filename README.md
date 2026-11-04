@@ -27,6 +27,15 @@ observer --record [--replay <REPLAY.rep>] [--bot_dir <BOT_DIRECTORY>]
 ```
 
 `--replay` copies the replay to `<map_dir>/replays/input/` and BWAPI opens it on start (single player auto menu), so no manual selection is needed. Without it, select the replay inside the container.
+
+### Watch a replay with preset cameras
+```bash
+# DIR holds top<k>/<replay file>.vpd camera tracks (starcraft-vision scripts/demo_vpd.py)
+observer --replay <REPLAY.rep> --tracks <DIR> [--viewers 1-3] [--labels ...]
+# or name the tracks yourself
+observer --replay <REPLAY.rep> --preset <TRACK1.vpd> [<TRACK2.vpd> ...]
+```
+Each viewer is a container running the PresetObserver bot, which moves its camera along its track and shows its label ("Camera n") top left; a VNC viewer opens per container (ports 5900, 5901, ...). One viewer plays the replay alone; several watch it together in one LAN game: the first hosts, the others join, and the host clicks Start after they have had time to join (`REPLAY_START_DELAY`). A replay lobby takes at most as many viewers as the replay has players (2 for a 1v1), so `--viewers` defaults to that number, capped at 3, and more is refused.
 You can put the RealVNC client to fullscreen and play comfortably.
 
 (Although you might want to change your screen resolution to 800x600)
