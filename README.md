@@ -37,7 +37,7 @@ The GUI is going to be probably slower than normal game due to streaming via VNC
 
 ## Known limitations 
 
-- Headful mode needs to specify the replays manually due to "Unable to distribute map" bug, unless `--replay` is given (not yet tested in the container).
+- Headful mode needs to specify the replays manually due to "Unable to distribute map" bug, unless `--replay` is given.
 - Headless mode not work due to `bwheadless` not designed for replay files.
 
 ## Specification
