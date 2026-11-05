@@ -1,12 +1,11 @@
 """
-Read the player list of a StarCraft 1.16 replay.
+Read the game settings of a StarCraft 1.16 replay.
 
 A replay's sections are PKWare DCL "implode" compressed; `explode` is a port
-of zlib's contrib/blast.c. Only the header is read: the players watching a
-replay together in a LAN game can be at most as many as the replay's players.
+of zlib's contrib/blast.c. Only the header is read: how many can watch a
+replay together in a LAN game depends on the game type it was recorded with.
 """
 import struct
-from typing import List
 
 _LITLEN = [11, 124, 8, 7, 28, 7, 188, 13, 76, 4, 10, 8, 12, 10, 12, 10, 8, 23, 8, 9, 7, 6, 7, 8, 7, 6, 55, 8, 23,
            24, 12, 11, 7, 9, 11, 12, 6, 7, 22, 5, 7, 24, 6, 11, 9, 6, 7, 22, 7, 11, 38, 7, 9, 8, 25, 11, 8, 11, 9, 12,
@@ -18,8 +17,9 @@ _BASE = [3, 2, 4, 5, 6, 7, 8, 9, 10, 12, 16, 24, 40, 72, 136, 264]
 _EXTRA = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 HEADER_SIZE = 0x279
-PLAYERS_OFFSET = 0xA1
-PLAYER_SIZE = 36
+MAX_PLAYERS_OFFSET = 0x39  # seats of the recorded game: 2 (1on1), the map's players (Melee), 8 (UMS)
+GAME_TYPE_OFFSET = 0x3C
+ONE_ON_ONE = 0x04
 
 
 def _huffman(compact):
@@ -101,15 +101,17 @@ def _section(f, size: int) -> bytes:
     return bytes(out[:size])
 
 
-def replay_players(path: str) -> List[str]:
-    """Names of the human and computer players of a replay."""
+def replay_seats(path: str) -> int:
+    """How many viewers can join a LAN game of this replay.
+
+    A replay lobby shows 8 open slots, but One on One replays admit only 2
+    (a third viewer gets "Unable to join game", even with the seats byte
+    raised); other game types admit the recorded game's seats (Melee: the
+    map's players, Use Map Settings: 8).
+    """
     with open(path, "rb") as f:
         _section(f, 4)  # replay id
         header = _section(f, HEADER_SIZE)
-    names = []
-    for i in range(12):
-        rec = header[PLAYERS_OFFSET + PLAYER_SIZE * i: PLAYERS_OFFSET + PLAYER_SIZE * (i + 1)]
-        player_type, name = rec[8], rec[11:].split(b"\0")[0]
-        if player_type in (1, 2) and name:  # computer, human
-            names.append(name.decode("cp949", "replace"))
-    return names
+    game_type = struct.unpack_from("<H", header, GAME_TYPE_OFFSET)[0]
+    return 2 if game_type == ONE_ON_ONE else header[MAX_PLAYERS_OFFSET]
+

@@ -35,7 +35,7 @@ observer --replay <REPLAY.rep> --tracks <DIR> [--viewers 1-3] [--labels ...]
 # or name the tracks yourself
 observer --replay <REPLAY.rep> --preset <TRACK1.vpd> [<TRACK2.vpd> ...]
 ```
-Each viewer is a container running the PresetObserver bot, which moves its camera along its track and shows its label ("Camera n") top left; a VNC viewer opens per container (ports 5900, 5901, ...). One viewer plays the replay alone; several watch it together in one LAN game: the first hosts, the others join, and the host clicks Start after they have had time to join (`REPLAY_START_DELAY`). A replay lobby takes at most as many viewers as the replay has players (2 for a 1v1), so `--viewers` defaults to that number, capped at 3, and more is refused.
+Each viewer is a container running the PresetObserver bot, which moves its camera along its track and shows its label ("Camera n") top left; a VNC viewer opens per container (ports 5900, 5901, ...). One viewer plays the replay alone; several watch it together in one LAN game: the first hosts, the others join, and the host clicks Start after they have had time to join (`REPLAY_START_DELAY`). How many can join depends on the game type the replay was recorded with: 2 for One on One, the map's players for Melee, 8 for Use Map Settings (the lobby shows 8 open slots either way). `--viewers` defaults to that number, capped at 3, and more is refused.
 You can put the RealVNC client to fullscreen and play comfortably.
 
 (Although you might want to change your screen resolution to 800x600)

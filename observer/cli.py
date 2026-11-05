@@ -11,7 +11,7 @@ from observer.error import ObserverException
 from observer.game import run_game
 from observer.game_type import GameType
 from observer.player import bot_regex, PlayerRace
-from observer.replay import replay_players
+from observer.replay import replay_seats
 from observer.utils import random_string
 
 logger = logging.getLogger(__name__)
@@ -38,7 +38,7 @@ parser.add_argument('--tracks', type=str, metavar="DIR", default=None,
                          "Viewer k plays DIR/top<k>/<replay file>.vpd.")
 parser.add_argument('--viewers', type=int, choices=range(1, MAX_VIEWERS + 1), default=None,
                     help=f"How many viewers (containers) --tracks starts, 1-{MAX_VIEWERS}.\n"
-                         "Default: as many as the replay has players, at most "
+                         "Default: as many as the replay's lobby admits (2 for One on One), at most "
                          f"{MAX_VIEWERS}.")
 parser.add_argument('--labels', type=str, nargs='+', metavar="LABEL", default=None,
                     help="Text each --preset camera shows top left, one per track.\n"
@@ -177,19 +177,19 @@ def main():
     if args.tracks is not None or args.preset is not None:
         if args.replay is None:
             parser.error('--preset/--tracks need --replay (a track belongs to one replay)')
-        # viewers of one replay join one LAN game, which takes at most
-        # as many as the replay's players
-        players = len(replay_players(args.replay))
+        # viewers of one replay join one LAN game, which admits only as
+        # many as the replay's game type allows
+        seats = replay_seats(args.replay)
     if args.tracks is not None:
         if args.preset is not None:
             parser.error('give --tracks or --preset, not both')
-        viewers = args.viewers or min(MAX_VIEWERS, players)
+        viewers = args.viewers or min(MAX_VIEWERS, seats)
         args.preset = [os.path.join(args.tracks, f"top{k}", os.path.basename(args.replay) + ".vpd")
                        for k in range(1, viewers + 1)]
     if args.preset is not None:
-        if len(args.preset) > players:
-            parser.error(f'{len(args.preset)} viewers, but {os.path.basename(args.replay)} '
-                         f'has {players} players: a replay lobby takes at most that many')
+        if len(args.preset) > seats:
+            parser.error(f'{len(args.preset)} viewers, but a LAN game of {os.path.basename(args.replay)} '
+                         f'admits {seats}, the most its recorded game type allows')
         for track in args.preset:
             if not os.path.isfile(track):
                 parser.error(f'camera track {track} was not found')
