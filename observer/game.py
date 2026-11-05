@@ -41,6 +41,9 @@ class GameArgs(Namespace):
     vnc_base_port: int
     vnc_host: str
     capture_movement: bool
+    vnc_scale: Optional[List[str]]
+    view_only: bool
+    no_vnc_viewer: bool
     auto_launch: bool
     show_all: bool
     allow_input: bool
@@ -187,6 +190,9 @@ def run_game(
         vnc_base_port=args.vnc_base_port,
         vnc_host=args.vnc_host,
         capture_movement=args.capture_movement,
+        vnc_scales=args.vnc_scale,
+        vnc_view_only=args.view_only,
+        vnc_viewer=not args.no_vnc_viewer,
 
         # docker
         docker_image=args.docker_image,

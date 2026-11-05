@@ -182,6 +182,8 @@ def launch_image(
         vnc_base_port: int,
         vnc_host: int,
         capture_movement: bool,
+        vnc_scale: Optional[str],
+        vnc_view_only: bool,
 
         # docker
         docker_image: str,
@@ -234,6 +236,8 @@ def launch_image(
 
         EXIT_CODE_REALTIME_OUTED=EXIT_CODE_REALTIME_OUTED,
         CAPTURE_MOUSE_MOVEMENT="1" if capture_movement else "0",
+        VNC_SCALE=vnc_scale or "",
+        VNC_VIEW_ONLY="1" if vnc_view_only else "0",
         HEADFUL_AUTO_LAUNCH="1" if auto_launch else "0",
 
         JAVA_DEBUG="0"
@@ -368,12 +372,16 @@ def launch_game(
     #     logger.info(f"removing existing game results of {game_name}")
     #     shutil.rmtree(f"{game_dir}/{game_name}")
 
+    image_params = {k: v for k, v in launch_params.items() if k not in ("vnc_scales", "vnc_viewer")}
+    scales = launch_params.get("vnc_scales") or []
     for nth_player, player in enumerate(players):
         if nth_player > 1 and launch_params["watch_replay"]:
             # joiners of a shared replay join one at a time
             time.sleep(10)
         launch_image(player, nth_player=nth_player, num_players=len(players),
-                     host_name=players[0].name, **launch_params)
+                     host_name=players[0].name,
+                     vnc_scale=scales[nth_player] if nth_player < len(scales) else None,
+                     **image_params)
 
     logger.debug("checking if game has launched properly...")
     time.sleep(1)
@@ -382,7 +390,8 @@ def launch_game(
         raise DockerException("some containers exited prematurely, please check logs")
 
     if not launch_params["headless"]:
-        for index, player in enumerate(players if show_all else players[:1]):
+        viewers = players if show_all else players[:1]
+        for index, player in enumerate(viewers if launch_params.get("vnc_viewer", True) else []):
             port = launch_params["vnc_base_port"] + index
             host = launch_params["vnc_host"]
             logger.info(f"launching vnc viewer for {player} on address {host}:{port}")

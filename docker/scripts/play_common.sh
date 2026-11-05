@@ -108,7 +108,12 @@ function start_gui() {
     sleep 1
 
     LOG "Starting VNC server" "$LOG_XVNC"
-    x11vnc -forever -nopw -display :0 >> "$LOG_XVNC" 2>&1 &
+    # -shared: more than one viewer may watch (a demo shows a camera twice);
+    # VNC_SCALE resizes the picture viewers get, VNC_VIEW_ONLY drops their input
+    VNC_OPTS="-shared"
+    [ -n "$VNC_SCALE" ] && VNC_OPTS="$VNC_OPTS -scale $VNC_SCALE"
+    [ "$VNC_VIEW_ONLY" = "1" ] && VNC_OPTS="$VNC_OPTS -viewonly"
+    x11vnc -forever -nopw -display :0 $VNC_OPTS >> "$LOG_XVNC" 2>&1 &
     sleep 1
 }
 

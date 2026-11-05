@@ -94,6 +94,13 @@ parser.add_argument('--vnc_base_port', type=int, default=BASE_VNC_PORT,
 parser.add_argument('--vnc_host', type=str, default='',
                     help="Address of the host on which VNC connections would be accessible\n"
                          f"default:\n{VNC_HOST} or IP address of the docker-machine")
+parser.add_argument('--vnc_scale', type=str, nargs='+', metavar="FRACTION", default=None,
+                    help="Scale each container's VNC picture (x11vnc -scale), one per container\n"
+                         "in player order, e.g. 3/2 3/4 3/4; the game screen is 640x480.")
+parser.add_argument('--view_only', action="store_true",
+                    help="VNC viewers can only watch: no mouse or keyboard reaches the game.")
+parser.add_argument('--no_vnc_viewer', action="store_true",
+                    help="Do not open VNC viewers (a launcher opens and places them itself).")
 parser.add_argument('--capture_movement', action="store_true",
                     help="If mouse gets outside of the VNC window, \n"
                          "do not move the game (only use mini map)")
