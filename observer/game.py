@@ -17,6 +17,7 @@ from observer.docker_utils import dockermachine_ip, launch_game, remove_game_con
 from observer.error import GameException, RealtimeOutedException
 from observer.game_type import GameType
 from observer.player import HumanPlayer, BotPlayer
+from observer.replay import is_one_on_one, write_as_melee
 from observer.result import GameResult
 from observer.vnc import check_vnc_exists
 
@@ -52,18 +53,25 @@ class GameArgs(Namespace):
     labels: Optional[List[str]]
 
 
-def stage_replay(replay: str, map_dir: str) -> str:
+def stage_replay(replay: str, map_dir: str, as_melee: bool = False) -> str:
     """
     Copy the replay into the mounted map dir and return its path
     as BWAPI sees it (relative to the StarCraft dir).
+    as_melee: stage it as a Melee replay (see observer.replay.write_as_melee).
     """
     # bwapi.ini is edited with sed, so keep the name to safe characters
     name = re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(replay))
     dst = f"{map_dir}/replays/input/{name}"
     os.makedirs(os.path.dirname(dst), exist_ok=True)
+    src = replay
+    if as_melee:
+        src = f"{dst}.melee"
+        write_as_melee(replay, src)
     # a game started earlier may be reading the same replay; don't rewrite it
-    if not (os.path.isfile(dst) and filecmp.cmp(replay, dst, shallow=False)):
-        shutil.copyfile(replay, dst)
+    if not (os.path.isfile(dst) and filecmp.cmp(src, dst, shallow=False)):
+        shutil.copyfile(src, dst)
+    if as_melee:
+        os.remove(src)
     return f"maps/replays/input/{name}"
 
 
@@ -143,8 +151,10 @@ def run_game(
 
     watch_replay = ""
     if args.replay is not None:
-        watch_replay = stage_replay(args.replay, args.map_dir)
-        logger.info(f"replay {args.replay} staged as {watch_replay}")
+        # a One on One replay admits only 2 viewers, a Melee one the map's players
+        as_melee = args.preset is not None and len(args.preset) > 2 and is_one_on_one(args.replay)
+        watch_replay = stage_replay(args.replay, args.map_dir, as_melee)
+        logger.info(f"replay {args.replay} staged as {watch_replay}" + (" (as Melee)" if as_melee else ""))
 
     if args.preset is not None:
         labels = args.labels or [f"Camera {n + 1}" for n in range(len(args.preset))]

@@ -38,7 +38,7 @@ parser.add_argument('--tracks', type=str, metavar="DIR", default=None,
                          "Viewer k plays DIR/top<k>/<replay file>.vpd.")
 parser.add_argument('--viewers', type=int, choices=range(1, MAX_VIEWERS + 1), default=None,
                     help=f"How many viewers (containers) --tracks starts, 1-{MAX_VIEWERS}.\n"
-                         "Default: as many as the replay's lobby admits (2 for One on One), at most "
+                         "Default: as many as the replay's lobby admits, at most "
                          f"{MAX_VIEWERS}.")
 parser.add_argument('--labels', type=str, nargs='+', metavar="LABEL", default=None,
                     help="Text each --preset camera shows top left, one per track.\n"
@@ -178,8 +178,9 @@ def main():
         if args.replay is None:
             parser.error('--preset/--tracks need --replay (a track belongs to one replay)')
         # viewers of one replay join one LAN game, which admits only as
-        # many as the replay's game type allows
-        seats = replay_seats(args.replay)
+        # many as the replay's game type allows; a One on One replay is
+        # staged as Melee for more than two
+        seats = replay_seats(args.replay, as_melee=True)
     if args.tracks is not None:
         if args.preset is not None:
             parser.error('give --tracks or --preset, not both')
@@ -189,7 +190,7 @@ def main():
     if args.preset is not None:
         if len(args.preset) > seats:
             parser.error(f'{len(args.preset)} viewers, but a LAN game of {os.path.basename(args.replay)} '
-                         f'admits {seats}, the most its recorded game type allows')
+                         f'admits {seats}, the most its game type and map allow')
         for track in args.preset:
             if not os.path.isfile(track):
                 parser.error(f'camera track {track} was not found')
