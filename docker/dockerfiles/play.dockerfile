@@ -2,10 +2,11 @@ FROM starcraft:bwapi
 LABEL maintainer="Michal Sustr <michal.sustr@aic.fel.cvut.cz>"
 
 # xdotool drives the game window: auto launch, capture_movement and the
-# Start click of a shared replay (play_common.sh)
+# Start click of a shared replay (play_common.sh); ffmpeg records the screen
+# for a demo video (starcraft-vision scripts/demo_launch.py --record)
 USER root
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends xdotool \
+    && apt-get install -y --no-install-recommends xdotool ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 USER starcraft
